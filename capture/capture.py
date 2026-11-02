@@ -602,7 +602,18 @@ DEFAULT_THEME_API = {"method": "PUT", "path": "/api/config/theme", "body": {"mod
 
 def apply_theme(page: Any, scenes: dict[str, Any], theme: str) -> None:
     spec = substitute(scenes.get("theme_api", DEFAULT_THEME_API), {"theme": theme})
-    status, data = api_call(page, spec.get("method", "PUT"), spec["path"], spec.get("body"))
+    # The dashboard can still be finishing its first load right after sign-in,
+    # and a navigation then aborts the page's fetch ("Failed to fetch"). Setting
+    # the theme is idempotent, so it is retried once the page has loaded.
+    for attempt in range(3):
+        try:
+            status, data = api_call(page, spec.get("method", "PUT"), spec["path"], spec.get("body"))
+            break
+        except Exception as exc:  # noqa: BLE001 -- Playwright's Error type
+            if "Failed to fetch" not in str(exc) or attempt == 2:
+                raise
+            page.wait_for_load_state("load")
+            page.wait_for_timeout(1000)
     if status >= 400:
         raise CaptureError(f"could not switch the dashboard to {theme}: {status} {str(data)[:200]}")
 

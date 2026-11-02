@@ -1,10 +1,11 @@
 {
   "app": "file-explorer",
-  "captured_at": "2026-11-02T07:58:22Z",
-  "app_commit": "8137f3a44cb39acfcf7e1e7a86be934a0eaf9a54",
+  "captured_at": "2026-11-02T10:17:19Z",
+  "app_commit": "be5e6e06e1e62de43c97ea8d516fd22f3f541c7d",
+  "app_tree_dirty": false,
   "kirocrew_commit": "390c5315be68b288b52cba9ece0d804e54fcd3d7",
   "kirocrew_tree_dirty": false,
-  "gateway": "isolated temporary home, approval=reads; a freshly seeded gateway for the stub screenshots, one for the live ones and one for the walkthrough",
+  "gateway": "isolated temporary home, approval=reads; one freshly seeded gateway each for the stub screenshots and the stub walkthrough",
   "data": "fictional: a made-up home folder written by capture/demo_tree.py (see data_notes), plus the app's own saved-state key; Files has no API that writes",
   "agent_backend": {
     "live": [],
@@ -28,7 +29,7 @@
       "file": "hero-dark.png",
       "name": "hero",
       "theme": "dark",
-      "bytes": 236529,
+      "bytes": 236669,
       "width": 1600,
       "height": 1000,
       "alt": "The Files page in Kiro Crew: a garden-planner project folder in the tree on the left, with its notes and src folders open and git marks beside the changed notes, and its README.md on the right rendered as formatted text with a table of garden beds"
@@ -37,7 +38,7 @@
       "file": "hero-light.png",
       "name": "hero",
       "theme": "light",
-      "bytes": 214631,
+      "bytes": 214676,
       "width": 1600,
       "height": 1000,
       "alt": "The Files page in Kiro Crew: a garden-planner project folder in the tree on the left, with its notes and src folders open and git marks beside the changed notes, and its README.md on the right rendered as formatted text with a table of garden beds"
@@ -46,7 +47,7 @@
       "file": "use-case-git-light.png",
       "name": "use-case-git",
       "theme": "light",
-      "bytes": 146847,
+      "bytes": 146877,
       "width": 1600,
       "height": 1000,
       "alt": "The tree marks the edited notes/todo.md with M and the new notes/frost-dates.md with U, the path bar shows the branch main with 2 changes, and todo.md is open showing its new last line"
@@ -64,7 +65,7 @@
       "file": "use-case-tabs-light.png",
       "name": "use-case-tabs",
       "theme": "light",
-      "bytes": 223360,
+      "bytes": 223374,
       "width": 1600,
       "height": 1000,
       "alt": "Three files open as tabs above the viewer (README.md, plots.csv and planner.py), with planner.py shown as syntax-highlighted Python code"
@@ -74,11 +75,11 @@
     "shortened_waits_s": [],
     "mp4": {
       "file": "walkthrough.mp4",
-      "bytes": 477931
+      "bytes": 403101
     },
     "gif": {
       "file": "walkthrough.gif",
-      "bytes": 2421597,
+      "bytes": 2010766,
       "width": 960,
       "fps": 10
     },

@@ -182,8 +182,9 @@ data folder. Files never opens those.
 
 **There are no git marks.**
 The folder is not a git project, git is not installed on the Kiro Crew computer,
-or that computer cannot run git in Kiro Crew's safety sandbox (the page then
-reports that git status is unavailable). Everything else still works.
+or that computer cannot run git in Kiro Crew's safety sandbox. In each case the
+marks and the branch name simply do not appear; the page shows no message about
+it. Everything else still works.
 
 **A file shows “truncated” or “Binary file”.**
 It is larger than 4 MB, or it is not text or a picture. Choose **⋯ → Download** to

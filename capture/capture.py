@@ -323,6 +323,29 @@ def git_head(path: Path) -> str | None:
     return out.stdout.strip() or None
 
 
+def gateway_runs(
+    shots: list[dict[str, Any]],
+    live_names: list[str],
+    walkthrough_name: str,
+    walkthrough: dict[str, Any] | None,
+) -> str:
+    """Name the freshly seeded gateways this run actually booted."""
+    live = set(live_names)
+    runs = []
+    if any(s.get("name") not in live for s in shots):
+        runs.append("the stub screenshots")
+    if any(s.get("name") in live for s in shots):
+        runs.append("the live screenshots")
+    if walkthrough:
+        kind = "live" if walkthrough_name in live else "stub"
+        runs.append(f"the {kind} walkthrough")
+    if not runs:
+        return "no gateway was booted by this run"
+    if len(runs) > 1:
+        runs[-2:] = [f"{runs[-2]} and {runs[-1]}"]
+    return "one freshly seeded gateway each for " + ", ".join(runs)
+
+
 def git_dirty(path: Path) -> bool | None:
     try:
         out = subprocess.run(
@@ -1275,6 +1298,9 @@ def main(argv: list[str]) -> int:
             finally:
                 browser.close()
 
+    # Read before anything is written: the run itself rewrites docs/media/.
+    app_commit = git_head(app_root)
+    app_tree_dirty = git_dirty(app_root)
     try:
         shots: list[dict[str, Any]] = []
         walkthrough = None
@@ -1328,12 +1354,12 @@ def main(argv: list[str]) -> int:
         manifest = {
             "app": scenes["app"],
             "captured_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-            "app_commit": git_head(Path(__file__).resolve().parent.parent),
+            "app_commit": app_commit,
+            "app_tree_dirty": app_tree_dirty,
             "kirocrew_commit": git_head(kirocrew),
             "kirocrew_tree_dirty": git_dirty(kirocrew),
-            "gateway": "isolated temporary home, approval=reads; a freshly seeded gateway "
-            "for the stub screenshots, one for the live ones and one for the "
-            "walkthrough",
+            "gateway": "isolated temporary home, approval=reads; "
+            + gateway_runs(shots, live_names, walkthrough_name, walkthrough),
             "data": scenes.get(
                 "data", "fictional, seeded through the app's HTTP API (capture/scenes.json)"
             ),

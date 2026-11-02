@@ -195,7 +195,7 @@ CSS such as `textarea[aria-label='Message input']`.
 
   ```bash
   python capture/demo_tree.py /tmp/kc-files-demo
-  HOME=/tmp/kc-files-demo/home/sam python capture/capture.py --kirocrew /path/to/KiroCrew
+  HOME=/tmp/kc-files-demo/sam python capture/capture.py --kirocrew /path/to/KiroCrew
   ```
 
   The gateway itself adds a `.kiro` and a `workplace` folder to that home, so the

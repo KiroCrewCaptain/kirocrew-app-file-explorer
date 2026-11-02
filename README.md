@@ -242,7 +242,7 @@ written by `capture/demo_tree.py` and the gateway runs with `HOME` pointing at i
 
 ```bash
 python capture/demo_tree.py /tmp/kc-files-demo
-HOME=/tmp/kc-files-demo/home/sam python capture/capture.py --kirocrew /path/to/KiroCrew
+HOME=/tmp/kc-files-demo/sam python capture/capture.py --kirocrew /path/to/KiroCrew
 python capture/check_readme.py
 ```
 

@@ -1,7 +1,7 @@
 {
   "app": "file-explorer",
-  "captured_at": "2026-11-02T07:51:03Z",
-  "app_commit": "0cb3fb47f7f5ccbf6683f693f0e24b8673ad2271",
+  "captured_at": "2026-11-02T07:58:22Z",
+  "app_commit": "8137f3a44cb39acfcf7e1e7a86be934a0eaf9a54",
   "kirocrew_commit": "390c5315be68b288b52cba9ece0d804e54fcd3d7",
   "kirocrew_tree_dirty": false,
   "gateway": "isolated temporary home, approval=reads; a freshly seeded gateway for the stub screenshots, one for the live ones and one for the walkthrough",
@@ -28,7 +28,7 @@
       "file": "hero-dark.png",
       "name": "hero",
       "theme": "dark",
-      "bytes": 237185,
+      "bytes": 236529,
       "width": 1600,
       "height": 1000,
       "alt": "The Files page in Kiro Crew: a garden-planner project folder in the tree on the left, with its notes and src folders open and git marks beside the changed notes, and its README.md on the right rendered as formatted text with a table of garden beds"
@@ -37,7 +37,7 @@
       "file": "hero-light.png",
       "name": "hero",
       "theme": "light",
-      "bytes": 215406,
+      "bytes": 214631,
       "width": 1600,
       "height": 1000,
       "alt": "The Files page in Kiro Crew: a garden-planner project folder in the tree on the left, with its notes and src folders open and git marks beside the changed notes, and its README.md on the right rendered as formatted text with a table of garden beds"
@@ -46,7 +46,7 @@
       "file": "use-case-git-light.png",
       "name": "use-case-git",
       "theme": "light",
-      "bytes": 147566,
+      "bytes": 146847,
       "width": 1600,
       "height": 1000,
       "alt": "The tree marks the edited notes/todo.md with M and the new notes/frost-dates.md with U, the path bar shows the branch main with 2 changes, and todo.md is open showing its new last line"
@@ -55,7 +55,7 @@
       "file": "use-case-search-light.png",
       "name": "use-case-search",
       "theme": "light",
-      "bytes": 148817,
+      "bytes": 148290,
       "width": 1600,
       "height": 1000,
       "alt": "The search panel over the garden-planner folder with the word frost typed in, listing four matching lines in README.md, notes/frost-dates.md, notes/todo.md and src/planner.py"
@@ -64,7 +64,7 @@
       "file": "use-case-tabs-light.png",
       "name": "use-case-tabs",
       "theme": "light",
-      "bytes": 224037,
+      "bytes": 223360,
       "width": 1600,
       "height": 1000,
       "alt": "Three files open as tabs above the viewer (README.md, plots.csv and planner.py), with planner.py shown as syntax-highlighted Python code"
@@ -74,11 +74,11 @@
     "shortened_waits_s": [],
     "mp4": {
       "file": "walkthrough.mp4",
-      "bytes": 488329
+      "bytes": 477931
     },
     "gif": {
       "file": "walkthrough.gif",
-      "bytes": 2767177,
+      "bytes": 2421597,
       "width": 960,
       "fps": 10
     },

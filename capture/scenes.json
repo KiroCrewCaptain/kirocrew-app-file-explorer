@@ -12,7 +12,7 @@
   ],
   "init_storage": {
     "mc-nav": "0",
-    "kc:file-explorer:state:v2": "{\"folderTabs\":[{\"id\":\"ft-garden\",\"rootPath\":\"/tmp/kc-files-demo/home/sam/projects/garden-planner\",\"label\":\"\",\"expanded\":{\"/tmp/kc-files-demo/home/sam/projects/garden-planner\":true,\"/tmp/kc-files-demo/home/sam/projects/garden-planner/notes\":true,\"/tmp/kc-files-demo/home/sam/projects/garden-planner/src\":true}}],\"fileTabs\":[{\"id\":\"of-readme\",\"path\":\"/tmp/kc-files-demo/home/sam/projects/garden-planner/README.md\",\"folderId\":\"ft-garden\"}],\"activeFolderId\":\"ft-garden\",\"activeFileId\":\"of-readme\",\"leftWidth\":300}"
+    "kc:file-explorer:state:v2": "{\"folderTabs\":[{\"id\":\"ft-garden\",\"rootPath\":\"/tmp/kc-files-demo/sam/projects/garden-planner\",\"label\":\"\",\"expanded\":{\"/tmp/kc-files-demo/sam/projects/garden-planner\":true,\"/tmp/kc-files-demo/sam/projects/garden-planner/notes\":true,\"/tmp/kc-files-demo/sam/projects/garden-planner/src\":true}}],\"fileTabs\":[{\"id\":\"of-readme\",\"path\":\"/tmp/kc-files-demo/sam/projects/garden-planner/README.md\",\"folderId\":\"ft-garden\"}],\"activeFolderId\":\"ft-garden\",\"activeFileId\":\"of-readme\",\"leftWidth\":300}"
   },
   "ready": "text=Garden planner",
   "forbid_text": [

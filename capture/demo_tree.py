@@ -8,7 +8,7 @@ history), and ``capture.py`` is run with ``HOME`` pointing at it, so the page
 opens there and no real user name or path can reach a picture.
 
     python capture/demo_tree.py /tmp/kc-files-demo
-    HOME=/tmp/kc-files-demo/home/sam python capture/capture.py --kirocrew ...
+    HOME=/tmp/kc-files-demo/sam python capture/capture.py --kirocrew ...
 
 The folder is rebuilt from scratch on every run, git included (author and dates
 are fixed), so two runs photograph the same tree.
@@ -172,7 +172,7 @@ def _git(repo: Path, *args: str, when: str) -> None:
 
 
 def build(root: Path) -> Path:
-    home = root / "home" / "sam"
+    home = root / "sam"
     if root.exists():
         shutil.rmtree(root)
     project = home / "projects" / "garden-planner"

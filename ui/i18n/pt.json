@@ -1,0 +1,81 @@
+{
+  "fileExplorerPage": {
+    "backend_not_reachable": "Backend inacessível:",
+    "cannot_open_folder": "Não é possível abrir esta pasta",
+    "folder_unavailable": "Esta pasta não está disponível.",
+    "go_to_parent_folder": "Ir para a pasta principal",
+    "chat_about_this": "Conversar sobre isso",
+    "copy_path": "Copiar caminho",
+    "open": "Abrir",
+    "open_as_workspace_root": "Abrir como raiz do workspace",
+    "resize_panel": "Redimensionar painel",
+    "reveal_parent": "Mostrar pasta pai",
+    "link_open_failed": "Não foi possível abrir {{path}}.",
+    "link_target_missing": "Não há nenhum arquivo ou pasta nesse caminho.",
+    "link_target_relative": "Não é possível abrir {{path}}: os links precisam de um caminho completo.",
+    "link_target_unsupported": "Esse caminho não é um arquivo nem uma pasta."
+  },
+  "fileViewer": {
+    "binary_file": "Arquivo binário",
+    "copy_path": "Copiar caminho",
+    "copy_path_2": "Copiar caminho: {{path}}",
+    "download": "Baixar",
+    "more_options": "Mais opções",
+    "reload": "Recarregar",
+    "select_a_file_to_view": "Selecione um arquivo para visualizar",
+    "sensitive_file_avoid_sharing_your_screen_while_v": "Arquivo sensível — evite compartilhar sua tela ao visualizar credenciais",
+    "tip_ctrl_cmd_f_to_search": "Dica: Ctrl/Cmd+F para pesquisar",
+    "truncated": "· truncado"
+  },
+  "manifest": {
+    "description": "Navegue e leia arquivos na máquina que executa o Kiro Crew sem sair do painel. Mantenha vários arquivos abertos em abas, percorra a árvore de diretórios com o status git de cada arquivo ao lado, pesquise um texto em uma pasta inteira e leia markdown renderizado em vez de bruto. É somente leitura por princípio: abre e pesquisa arquivos, mas nunca os edita, move ou exclui, e só alcança o seu diretório pessoal, o diretório temporário do sistema e, no Linux e no macOS, as árvores /home, /opt e /workplace.",
+    "display_name": "Arquivos",
+    "highlight_1": "Somente leitura: abre e pesquisa arquivos e nunca os grava, move ou exclui",
+    "highlight_2": "Vários arquivos abertos ao mesmo tempo em abas, com realce de sintaxe",
+    "highlight_3": "Arquivos Markdown são exibidos como texto formatado, em vez do código bruto",
+    "highlight_4": "A árvore de diretórios mostra o status git de cada arquivo na própria linha",
+    "highlight_5": "Pesquise em um diretório inteiro, com correspondências por linha e uma prévia do entorno",
+    "highlight_6": "Os caminhos acessíveis se limitam ao seu diretório pessoal, ao diretório temporário do sistema e, no Linux e no macOS, a /home, /opt e /workplace — links simbólicos para fora são recusados",
+    "page_label": "Arquivos",
+    "use_case_1": "Leia, pesquise, visualize, baixe ou discuta arquivos no host do gateway sem conceder acesso de gravação à página.",
+    "configuration_1": "Ative o app e abra um diretório permitido pela barra de caminho; nenhuma conta é necessária, e Git ou ripgrep apenas acrescentam recursos opcionais de status e pesquisa."
+  },
+  "pathBar": {
+    "click_to_edit_path": "Clique para editar o caminho",
+    "folder_path": "Caminho da pasta",
+    "path_to_folder": "/path/to/folder",
+    "refresh_folder": "Atualizar pasta"
+  },
+  "searchPanel": {
+    "capped": "(limitado)",
+    "close_esc": "Fechar (Esc)",
+    "close_search": "Fechar pesquisa",
+    "comma_separated_glob_patterns": "Padrões glob separados por vírgula",
+    "glob_e_g_md": "glob (ex.: *.md)",
+    "glob_filter_comma_separated_patterns": "Filtro glob (padrões separados por vírgula)",
+    "no_matches": "Nenhum resultado",
+    "search_failed": "falha na pesquisa",
+    "search_in": "Pesquisar em {{name}}",
+    "search_in_2": "Pesquisar em {{name}}…",
+    "searching": "pesquisando..."
+  },
+  "tabStrip": {
+    "close_file_tab": "Fechar aba do arquivo",
+    "close_workspace_tab": "Fechar aba do workspace",
+    "new_workspace_tab": "Nova aba de workspace",
+    "new_workspace_tab_ctrl_cmd_t": "Nova aba de workspace (Ctrl/Cmd+T)",
+    "rename_workspace_tab": "Renomear aba do workspace"
+  },
+  "treeNode": {
+    "loading": "carregando..."
+  },
+  "common": {
+    "app_disabled_title": "Este app está desativado",
+    "app_disabled_hint": "Ative este app em Apps para usá-lo.",
+    "apps": "Apps",
+    "result_count_many": "{{count}} resultados",
+    "result_count_one": "{{count}} resultado",
+    "result_count_other": "{{count}} resultados",
+    "dismiss": "Dispensar"
+  }
+}

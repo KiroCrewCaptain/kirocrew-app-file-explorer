@@ -1,0 +1,80 @@
+{
+  "fileExplorerPage": {
+    "backend_not_reachable": "Backend nicht erreichbar:",
+    "cannot_open_folder": "Ordner kann nicht geöffnet werden",
+    "folder_unavailable": "Dieser Ordner ist nicht verfügbar.",
+    "go_to_parent_folder": "Zum übergeordneten Ordner",
+    "chat_about_this": "Darüber chatten",
+    "copy_path": "Pfad kopieren",
+    "open": "Öffnen",
+    "open_as_workspace_root": "Als Workspace-Wurzel öffnen",
+    "resize_panel": "Größe des Panels ändern",
+    "reveal_parent": "Übergeordnetes Element anzeigen",
+    "link_open_failed": "{{path}} konnte nicht geöffnet werden.",
+    "link_target_missing": "Unter diesem Pfad gibt es keine Datei und keinen Ordner.",
+    "link_target_relative": "{{path}} lässt sich nicht öffnen: Links brauchen einen vollständigen Pfad.",
+    "link_target_unsupported": "Dieser Pfad ist weder eine Datei noch ein Ordner."
+  },
+  "fileViewer": {
+    "binary_file": "Binärdatei",
+    "copy_path": "Pfad kopieren",
+    "copy_path_2": "Pfad kopieren: {{path}}",
+    "download": "Herunterladen",
+    "more_options": "Weitere Optionen",
+    "reload": "Neu laden",
+    "select_a_file_to_view": "Wählen Sie eine Datei zur Anzeige",
+    "sensitive_file_avoid_sharing_your_screen_while_v": "Sensible Datei — vermeiden Sie das Teilen Ihres Bildschirms, während Sie Anmeldedaten ansehen",
+    "tip_ctrl_cmd_f_to_search": "Tipp: Strg/Cmd+F zum Suchen",
+    "truncated": "· gekürzt"
+  },
+  "manifest": {
+    "description": "Durchsuche und lies Dateien auf dem Rechner, der Kiro Crew ausführt, ohne das Dashboard zu verlassen. Halte mehrere Dateien in Tabs offen, gehe den Verzeichnisbaum durch, in dem neben jeder Datei ihr Git-Status steht, suche in einem ganzen Ordner nach einer Zeichenfolge und lies Markdown gerendert statt im Rohtext. Der Zugriff ist bewusst nur lesend: Dateien werden geöffnet und durchsucht, aber nie bearbeitet, verschoben oder gelöscht, und erreichbar sind nur dein Home-Verzeichnis, das temporäre Systemverzeichnis und unter Linux und macOS die Bäume /home, /opt und /workplace.",
+    "display_name": "Dateien",
+    "highlight_1": "Schreibgeschützt: öffnet und durchsucht Dateien und schreibt, verschiebt oder löscht sie nie",
+    "highlight_2": "Mehrere Dateien gleichzeitig in Tabs offen, mit Syntaxhervorhebung",
+    "highlight_3": "Markdown-Dateien werden als formatierter Text statt als Rohquelle dargestellt",
+    "highlight_4": "Der Verzeichnisbaum zeigt den Git-Status jeder Datei direkt an",
+    "highlight_5": "Suche über ein Verzeichnis hinweg mit Treffern auf Zeilenebene und umgebender Vorschau",
+    "highlight_6": "Erreichbare Pfade sind auf dein Home-Verzeichnis, das temporäre Systemverzeichnis und unter Linux und macOS /home, /opt und /workplace begrenzt — Symlinks nach außen werden abgelehnt",
+    "page_label": "Dateien",
+    "use_case_1": "Lies, durchsuche, zeige, lade oder besprich Dateien auf dem Gateway-Host, ohne der Seite Schreibzugriff zu gewähren.",
+    "configuration_1": "Aktiviere die App und öffne über die Pfadleiste ein erlaubtes Verzeichnis; ein Konto ist nicht erforderlich, und Git oder ripgrep ergänzen nur optionale Status- und Suchfunktionen."
+  },
+  "pathBar": {
+    "click_to_edit_path": "Klicken, um den Pfad zu bearbeiten",
+    "folder_path": "Ordnerpfad",
+    "path_to_folder": "/pfad/zum/ordner",
+    "refresh_folder": "Ordner aktualisieren"
+  },
+  "searchPanel": {
+    "capped": "(begrenzt)",
+    "close_esc": "Schließen (Esc)",
+    "close_search": "Suche schließen",
+    "comma_separated_glob_patterns": "Kommagetrennte Glob-Muster",
+    "glob_e_g_md": "Glob (z. B. *.md)",
+    "glob_filter_comma_separated_patterns": "Glob-Filter (kommagetrennte Muster)",
+    "no_matches": "Keine Treffer",
+    "search_failed": "Suche fehlgeschlagen",
+    "search_in": "In {{name}} suchen",
+    "search_in_2": "In {{name}} suchen...",
+    "searching": "Suche läuft..."
+  },
+  "tabStrip": {
+    "close_file_tab": "Datei-Tab schließen",
+    "close_workspace_tab": "Workspace-Tab schließen",
+    "new_workspace_tab": "Neuer Workspace-Tab",
+    "new_workspace_tab_ctrl_cmd_t": "Neuer Workspace-Tab (Strg/Cmd+T)",
+    "rename_workspace_tab": "Workspace-Tab umbenennen"
+  },
+  "treeNode": {
+    "loading": "wird geladen…"
+  },
+  "common": {
+    "app_disabled_title": "Diese App ist deaktiviert",
+    "app_disabled_hint": "Aktivieren Sie diese App unter „Apps“, um sie zu verwenden.",
+    "apps": "Apps",
+    "result_count_one": "{{count}} Ergebnis",
+    "result_count_other": "{{count}} Ergebnisse",
+    "dismiss": "Schließen"
+  }
+}

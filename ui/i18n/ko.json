@@ -1,0 +1,79 @@
+{
+  "fileExplorerPage": {
+    "backend_not_reachable": "백엔드에 연결할 수 없습니다:",
+    "cannot_open_folder": "이 폴더를 열 수 없습니다",
+    "folder_unavailable": "이 폴더를 사용할 수 없습니다.",
+    "go_to_parent_folder": "상위 폴더로 이동",
+    "chat_about_this": "이 항목에 대해 대화하기",
+    "copy_path": "경로 복사",
+    "open": "열기",
+    "open_as_workspace_root": "워크스페이스 루트로 열기",
+    "resize_panel": "패널 크기 조절",
+    "reveal_parent": "상위 폴더 표시",
+    "link_open_failed": "‘{{path}}’을(를) 열 수 없습니다.",
+    "link_target_missing": "해당 경로에는 파일이나 폴더가 없습니다.",
+    "link_target_relative": "‘{{path}}’을(를) 열 수 없습니다. 링크에는 전체 경로가 필요합니다.",
+    "link_target_unsupported": "해당 경로는 파일도 폴더도 아닙니다."
+  },
+  "fileViewer": {
+    "binary_file": "바이너리 파일",
+    "copy_path": "경로 복사",
+    "copy_path_2": "경로 복사: {{path}}",
+    "download": "다운로드",
+    "more_options": "옵션 더 보기",
+    "reload": "다시 불러오기",
+    "select_a_file_to_view": "볼 파일을 선택하세요",
+    "sensitive_file_avoid_sharing_your_screen_while_v": "민감한 파일 — 자격 증명을 보는 동안에는 화면 공유를 피하세요",
+    "tip_ctrl_cmd_f_to_search": "팁: Ctrl/Cmd+F로 검색",
+    "truncated": "· 잘림"
+  },
+  "manifest": {
+    "use_case_1": "페이지에 쓰기 권한을 주지 않고 게이트웨이 호스트의 파일을 읽고, 검색하고, 미리 보고, 다운로드하거나 대화로 논의합니다.",
+    "configuration_1": "앱을 활성화하고 경로 표시줄에서 허용된 디렉터리를 여세요. 계정은 필요하지 않으며 git 또는 ripgrep은 선택적인 상태 표시와 검색 기능만 추가합니다.",
+    "description": "대시보드를 벗어나지 않고 Kiro Crew가 실행 중인 머신의 파일을 살펴보고 읽습니다. 여러 파일을 탭으로 열어 두고, 각 파일의 git 상태가 옆에 표시되는 디렉터리 트리를 따라 이동하고, 폴더 전체에서 문자열을 검색하고, Markdown을 원본이 아닌 렌더링된 형태로 읽을 수 있습니다. 설계상 읽기 전용입니다. 파일을 열고 검색하지만 편집·이동·삭제는 절대 하지 않으며, 접근 범위는 홈 디렉터리, 시스템 임시 디렉터리, 그리고 Linux와 macOS에서는 /home, /opt, /workplace 트리로 한정됩니다.",
+    "display_name": "파일",
+    "highlight_1": "읽기 전용: 파일을 열고 검색하며, 쓰기·이동·삭제는 하지 않습니다",
+    "highlight_2": "여러 파일을 탭으로 동시에 열고 구문 강조를 표시",
+    "highlight_3": "Markdown 파일을 원본 소스가 아닌 서식이 적용된 텍스트로 표시",
+    "highlight_4": "디렉터리 트리에 각 파일의 git 상태를 함께 표시",
+    "highlight_5": "줄 단위 일치와 주변 미리 보기를 포함해 디렉터리 전체를 검색",
+    "highlight_6": "접근 가능한 경로는 홈 디렉터리, 시스템 임시 디렉터리, 그리고 Linux와 macOS에서는 /home과 /opt, /workplace로 제한 — 바깥으로 향하는 심볼릭 링크는 거부",
+    "page_label": "파일"
+  },
+  "pathBar": {
+    "click_to_edit_path": "클릭해서 경로 편집",
+    "folder_path": "폴더 경로",
+    "path_to_folder": "/path/to/folder",
+    "refresh_folder": "폴더 새로 고침"
+  },
+  "searchPanel": {
+    "capped": "(상한 도달)",
+    "close_esc": "닫기 (Esc)",
+    "close_search": "검색 닫기",
+    "comma_separated_glob_patterns": "쉼표로 구분한 글로브 패턴",
+    "glob_e_g_md": "글로브 (예: *.md)",
+    "glob_filter_comma_separated_patterns": "글로브 필터 (쉼표로 구분한 패턴)",
+    "no_matches": "일치 항목 없음",
+    "search_failed": "검색 실패",
+    "search_in": "{{name}}에서 검색",
+    "search_in_2": "{{name}}에서 검색…",
+    "searching": "검색 중…"
+  },
+  "tabStrip": {
+    "close_file_tab": "파일 탭 닫기",
+    "close_workspace_tab": "워크스페이스 탭 닫기",
+    "new_workspace_tab": "새 워크스페이스 탭",
+    "new_workspace_tab_ctrl_cmd_t": "새 워크스페이스 탭 (Ctrl/Cmd+T)",
+    "rename_workspace_tab": "워크스페이스 탭 이름 변경"
+  },
+  "treeNode": {
+    "loading": "불러오는 중…"
+  },
+  "common": {
+    "app_disabled_title": "이 앱은 비활성화되어 있습니다",
+    "app_disabled_hint": "사용하려면 앱에서 이 앱을 활성화하세요.",
+    "apps": "앱",
+    "result_count_other": "결과 {{count}}개",
+    "dismiss": "닫기"
+  }
+}

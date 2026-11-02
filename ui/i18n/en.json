@@ -1,0 +1,80 @@
+{
+  "fileExplorerPage": {
+    "backend_not_reachable": "Backend not reachable:",
+    "cannot_open_folder": "Cannot open this folder",
+    "folder_unavailable": "This folder is unavailable.",
+    "go_to_parent_folder": "Go to parent folder",
+    "chat_about_this": "Chat about this",
+    "copy_path": "Copy path",
+    "open": "Open",
+    "open_as_workspace_root": "Open as workspace root",
+    "resize_panel": "Resize panel",
+    "reveal_parent": "Reveal parent",
+    "link_open_failed": "Couldn’t open {{path}}.",
+    "link_target_missing": "There is no file or folder at that path.",
+    "link_target_relative": "Can’t open {{path}}: links need a full path.",
+    "link_target_unsupported": "That path is not a file or a folder."
+  },
+  "fileViewer": {
+    "binary_file": "Binary file",
+    "copy_path": "Copy path",
+    "download": "Download",
+    "reload": "Reload",
+    "select_a_file_to_view": "Select a file to view",
+    "sensitive_file_avoid_sharing_your_screen_while_v": "Sensitive file — avoid sharing your screen while viewing credentials",
+    "tip_ctrl_cmd_f_to_search": "Tip: Ctrl/Cmd+F to search",
+    "truncated": "· truncated",
+    "copy_path_2": "Copy path: {{path}}",
+    "more_options": "More options"
+  },
+  "manifest": {
+    "description": "Browse and read files on the machine running Kiro Crew without leaving the dashboard. Keep several files open in tabs, walk the directory tree with each file's git status shown beside it, search a whole folder for a string, and read markdown rendered rather than raw. It is read-only by design: it opens and searches files but never edits, moves, or deletes them, and it can only reach your home directory, the system temp directory, and on Linux and macOS the /home, /opt, and /workplace trees.",
+    "display_name": "Files",
+    "highlight_1": "Read-only: opens and searches files, and never writes, moves, or deletes them",
+    "highlight_2": "Multiple files open at once in tabs, with syntax highlighting",
+    "highlight_3": "Markdown files render as formatted text instead of raw source",
+    "highlight_4": "Directory tree shows each file's git status inline",
+    "highlight_5": "Search across a directory with line-level matches and surrounding preview",
+    "highlight_6": "Reachable paths are your home directory, the system temp directory, and on Linux and macOS /home /opt, and /workplace — symlinks out are refused",
+    "page_label": "Files",
+    "use_case_1": "Read, search, preview, download, or discuss files on the gateway host without granting the page write access.",
+    "configuration_1": "Enable the app and open an allowed directory from the path bar; no account is required, and git or ripgrep only add optional status and search enhancements."
+  },
+  "pathBar": {
+    "click_to_edit_path": "Click to edit path",
+    "folder_path": "Folder path",
+    "path_to_folder": "/path/to/folder",
+    "refresh_folder": "Refresh folder"
+  },
+  "searchPanel": {
+    "close_esc": "Close (Esc)",
+    "close_search": "Close search",
+    "comma_separated_glob_patterns": "Comma-separated glob patterns",
+    "glob_e_g_md": "glob (e.g. *.md)",
+    "glob_filter_comma_separated_patterns": "Glob filter (comma-separated patterns)",
+    "no_matches": "No matches",
+    "capped": "(capped)",
+    "search_failed": "search failed",
+    "search_in": "Search in {{name}}",
+    "search_in_2": "Search in {{name}}...",
+    "searching": "searching..."
+  },
+  "tabStrip": {
+    "close_file_tab": "Close file tab",
+    "close_workspace_tab": "Close workspace tab",
+    "new_workspace_tab": "New workspace tab",
+    "new_workspace_tab_ctrl_cmd_t": "New workspace tab (Ctrl/Cmd+T)",
+    "rename_workspace_tab": "Rename workspace tab"
+  },
+  "treeNode": {
+    "loading": "loading..."
+  },
+  "common": {
+    "app_disabled_title": "This app is disabled",
+    "app_disabled_hint": "Enable this app from Apps to use it.",
+    "apps": "Apps",
+    "result_count_one": "{{count}} result",
+    "result_count_other": "{{count}} results",
+    "dismiss": "Dismiss"
+  }
+}

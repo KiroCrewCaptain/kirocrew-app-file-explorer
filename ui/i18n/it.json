@@ -1,0 +1,81 @@
+{
+  "fileExplorerPage": {
+    "backend_not_reachable": "Backend non raggiungibile:",
+    "cannot_open_folder": "Impossibile aprire questa cartella",
+    "folder_unavailable": "Questa cartella non è disponibile.",
+    "go_to_parent_folder": "Vai alla cartella principale",
+    "chat_about_this": "Chatta su questo",
+    "copy_path": "Copia percorso",
+    "open": "Apri",
+    "open_as_workspace_root": "Apri come radice del workspace",
+    "resize_panel": "Ridimensiona il pannello",
+    "reveal_parent": "Mostra l'elemento padre",
+    "link_open_failed": "Impossibile aprire {{path}}.",
+    "link_target_missing": "Non c’è nessun file o cartella in quel percorso.",
+    "link_target_relative": "Impossibile aprire {{path}}: i link richiedono un percorso completo.",
+    "link_target_unsupported": "Quel percorso non è né un file né una cartella."
+  },
+  "fileViewer": {
+    "binary_file": "File binario",
+    "copy_path": "Copia percorso",
+    "copy_path_2": "Copia percorso: {{path}}",
+    "download": "Scarica",
+    "more_options": "Altre opzioni",
+    "reload": "Ricarica",
+    "select_a_file_to_view": "Seleziona un file da visualizzare",
+    "sensitive_file_avoid_sharing_your_screen_while_v": "File sensibile — evita di condividere lo schermo mentre visualizzi delle credenziali",
+    "tip_ctrl_cmd_f_to_search": "Suggerimento: Ctrl/Cmd+F per cercare",
+    "truncated": "· troncato"
+  },
+  "manifest": {
+    "description": "Sfoglia e leggi i file sulla macchina che esegue Kiro Crew senza uscire dalla dashboard. Tieni aperti più file in schede, percorri l’albero delle cartelle con accanto lo stato git di ciascun file, cerca una stringa in un’intera cartella e leggi il markdown formattato anziché grezzo. È di sola lettura per scelta: apre e cerca nei file ma non li modifica, non li sposta e non li elimina mai, e può raggiungere solo la tua home, la directory temporanea di sistema e, su Linux e macOS, gli alberi /home, /opt e /workplace.",
+    "display_name": "File",
+    "highlight_1": "Sola lettura: apre e cerca nei file, e non li scrive, sposta o elimina mai",
+    "highlight_2": "Più file aperti contemporaneamente in schede, con evidenziazione della sintassi",
+    "highlight_3": "I file Markdown vengono resi come testo formattato invece che come sorgente grezzo",
+    "highlight_4": "L’albero delle cartelle mostra in linea lo stato git di ogni file",
+    "highlight_5": "Cerca in tutta una cartella con corrispondenze riga per riga e anteprima del contesto",
+    "highlight_6": "I percorsi raggiungibili si limitano alla tua home, alla directory temporanea di sistema e, su Linux e macOS, a /home, /opt e /workplace — i symlink che escono da lì vengono rifiutati",
+    "page_label": "File",
+    "use_case_1": "Leggi, cerca, visualizza in anteprima, scarica o discuti i file sull'host del gateway senza concedere alla pagina accesso in scrittura.",
+    "configuration_1": "Attiva l'app e apri una directory consentita dalla barra del percorso; non serve un account e Git o ripgrep aggiungono solo funzioni opzionali per stato e ricerca."
+  },
+  "pathBar": {
+    "click_to_edit_path": "Clicca per modificare il percorso",
+    "folder_path": "Percorso della cartella",
+    "path_to_folder": "/percorso/della/cartella",
+    "refresh_folder": "Aggiorna cartella"
+  },
+  "searchPanel": {
+    "capped": "(limitato)",
+    "close_esc": "Chiudi (Esc)",
+    "close_search": "Chiudi la ricerca",
+    "comma_separated_glob_patterns": "Pattern glob separati da virgole",
+    "glob_e_g_md": "glob (ad es. *.md)",
+    "glob_filter_comma_separated_patterns": "Filtro glob (pattern separati da virgole)",
+    "no_matches": "Nessuna corrispondenza",
+    "search_failed": "ricerca non riuscita",
+    "search_in": "Cerca in {{name}}",
+    "search_in_2": "Cerca in {{name}}…",
+    "searching": "ricerca in corso..."
+  },
+  "tabStrip": {
+    "close_file_tab": "Chiudi la scheda del file",
+    "close_workspace_tab": "Chiudi la scheda del workspace",
+    "new_workspace_tab": "Nuova scheda del workspace",
+    "new_workspace_tab_ctrl_cmd_t": "Nuova scheda del workspace (Ctrl/Cmd+T)",
+    "rename_workspace_tab": "Rinomina la scheda del workspace"
+  },
+  "treeNode": {
+    "loading": "caricamento..."
+  },
+  "common": {
+    "app_disabled_title": "Questa app è disattivata",
+    "app_disabled_hint": "Attiva questa app da App per poterla usare.",
+    "apps": "App",
+    "result_count_many": "{{count}} risultati",
+    "result_count_one": "{{count}} risultato",
+    "result_count_other": "{{count}} risultati",
+    "dismiss": "Ignora"
+  }
+}

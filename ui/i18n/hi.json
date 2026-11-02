@@ -1,0 +1,80 @@
+{
+  "fileExplorerPage": {
+    "backend_not_reachable": "बैकएंड तक पहुँच नहीं:",
+    "cannot_open_folder": "यह फ़ोल्डर नहीं खुल सका",
+    "folder_unavailable": "यह फ़ोल्डर उपलब्ध नहीं है।",
+    "go_to_parent_folder": "मूल फ़ोल्डर पर जाएँ",
+    "chat_about_this": "इस पर चैट करें",
+    "copy_path": "पथ कॉपी करें",
+    "open": "खोलें",
+    "open_as_workspace_root": "वर्कस्पेस रूट के रूप में खोलें",
+    "resize_panel": "पैनल का आकार बदलें",
+    "reveal_parent": "पैरेंट दिखाएँ",
+    "link_open_failed": "{{path}} नहीं खोला जा सका।",
+    "link_target_missing": "इस पथ पर कोई फ़ाइल या फ़ोल्डर नहीं है।",
+    "link_target_relative": "{{path}} नहीं खोला जा सकता: लिंक के लिए पूर्ण पथ ज़रूरी है।",
+    "link_target_unsupported": "यह पथ कोई फ़ाइल या फ़ोल्डर नहीं है।"
+  },
+  "fileViewer": {
+    "binary_file": "बाइनरी फ़ाइल",
+    "copy_path": "पथ कॉपी करें",
+    "copy_path_2": "पाथ कॉपी करो: {{path}}",
+    "download": "डाउनलोड करें",
+    "more_options": "अधिक विकल्प",
+    "reload": "रीलोड करें",
+    "select_a_file_to_view": "देखने के लिए कोई फ़ाइल चुनें",
+    "sensitive_file_avoid_sharing_your_screen_while_v": "संवेदनशील फ़ाइल — क्रेडेंशियल देखते समय अपनी स्क्रीन साझा करने से बचें",
+    "tip_ctrl_cmd_f_to_search": "सुझाव: खोजने के लिए Ctrl/Cmd+F",
+    "truncated": "· छोटा किया गया"
+  },
+  "manifest": {
+    "description": "डैशबोर्ड छोड़े बिना Kiro Crew चला रही मशीन की फ़ाइलें ब्राउज़ करो और पढ़ो। कई फ़ाइलें टैब में खुली रखो, डायरेक्टरी ट्री में हर फ़ाइल की git स्थिति साथ में देखते हुए घूमो, पूरे फ़ोल्डर में कोई स्ट्रिंग खोजो, और markdown को कच्चे रूप की जगह रेंडर होकर पढ़ो। यह डिज़ाइन से ही रीड-ओनली है: यह फ़ाइलें खोलता और खोजता है पर उन्हें कभी नहीं बदलता, हटाता या मिटाता, और यह सिर्फ़ तुम्हारी होम डायरेक्टरी, सिस्टम की टेम्प डायरेक्टरी, और Linux व macOS पर /home, /opt और /workplace तक पहुँच सकता है।",
+    "display_name": "फ़ाइलें",
+    "use_case_1": "पेज को लिखने की अनुमति दिए बिना गेटवे होस्ट की फ़ाइलें पढ़ें, खोजें, उनका पूर्वावलोकन या डाउनलोड करें और उन पर चर्चा करें।",
+    "configuration_1": "ऐप सक्षम करके path bar से कोई अनुमत डायरेक्टरी खोलें; अकाउंट की आवश्यकता नहीं है, और git या ripgrep केवल वैकल्पिक स्थिति और बेहतर खोज जोड़ते हैं।",
+    "highlight_1": "रीड-ओनली: फ़ाइलें खोलता और खोजता है, और उन्हें कभी नहीं लिखता, हटाता या मिटाता",
+    "highlight_2": "सिंटैक्स हाइलाइटिंग के साथ एक ही वक़्त कई फ़ाइलें टैब में खुलती हैं",
+    "highlight_3": "Markdown फ़ाइलें कच्चे सोर्स की जगह फ़ॉर्मैट किए टेक्स्ट के रूप में रेंडर होती हैं",
+    "highlight_4": "डायरेक्टरी ट्री हर फ़ाइल की git स्थिति साथ ही दिखाता है",
+    "highlight_5": "पूरी डायरेक्टरी में खोजो, लाइन-स्तर के मैच और आस-पास का प्रीव्यू मिलता है",
+    "highlight_6": "पहुँच वाले पाथ तुम्हारी होम डायरेक्टरी, सिस्टम की टेम्प डायरेक्टरी, और Linux व macOS पर /home, /opt और /workplace तक सीमित हैं — बाहर जाते सिमलिंक मना कर दिए जाते हैं",
+    "page_label": "फ़ाइलें"
+  },
+  "pathBar": {
+    "click_to_edit_path": "पथ संपादित करने के लिए क्लिक करें",
+    "folder_path": "फ़ोल्डर पथ",
+    "path_to_folder": "/path/to/folder",
+    "refresh_folder": "फ़ोल्डर रीफ़्रेश करो"
+  },
+  "searchPanel": {
+    "capped": "(सीमित)",
+    "close_esc": "बंद करें (Esc)",
+    "close_search": "खोज बंद करें",
+    "comma_separated_glob_patterns": "कॉमा से अलग किए गए glob पैटर्न",
+    "glob_e_g_md": "glob (उदा. *.md)",
+    "glob_filter_comma_separated_patterns": "Glob फ़िल्टर (कॉमा से अलग किए गए पैटर्न)",
+    "no_matches": "कोई मिलान नहीं",
+    "search_failed": "खोज विफल",
+    "search_in": "{{name}} में खोजो",
+    "search_in_2": "{{name}} में खोजो...",
+    "searching": "खोज हो रही है..."
+  },
+  "tabStrip": {
+    "close_file_tab": "फ़ाइल टैब बंद करें",
+    "close_workspace_tab": "वर्कस्पेस टैब बंद करें",
+    "new_workspace_tab": "नया वर्कस्पेस टैब",
+    "new_workspace_tab_ctrl_cmd_t": "नया वर्कस्पेस टैब (Ctrl/Cmd+T)",
+    "rename_workspace_tab": "वर्कस्पेस टैब का नाम बदलें"
+  },
+  "treeNode": {
+    "loading": "लोड हो रहा है..."
+  },
+  "common": {
+    "app_disabled_title": "यह ऐप अक्षम है",
+    "app_disabled_hint": "इसका उपयोग करने के लिए इस ऐप को ऐप्स से सक्षम करें।",
+    "apps": "ऐप",
+    "result_count_one": "{{count}} परिणाम",
+    "result_count_other": "{{count}} परिणाम",
+    "dismiss": "खारिज करें"
+  }
+}

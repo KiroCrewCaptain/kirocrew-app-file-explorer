@@ -1,0 +1,79 @@
+{
+  "fileExplorerPage": {
+    "backend_not_reachable": "无法连接后端：",
+    "cannot_open_folder": "无法打开此文件夹",
+    "folder_unavailable": "此文件夹不可用。",
+    "go_to_parent_folder": "转到上级文件夹",
+    "chat_about_this": "就此发起聊天",
+    "copy_path": "复制路径",
+    "open": "打开",
+    "open_as_workspace_root": "作为工作区根目录打开",
+    "resize_panel": "调整面板大小",
+    "reveal_parent": "显示上级目录",
+    "link_open_failed": "无法打开 {{path}}。",
+    "link_target_missing": "该路径下没有文件或文件夹。",
+    "link_target_relative": "无法打开 {{path}}：链接需要使用完整路径。",
+    "link_target_unsupported": "该路径不是文件或文件夹。"
+  },
+  "fileViewer": {
+    "binary_file": "二进制文件",
+    "copy_path": "复制路径",
+    "copy_path_2": "复制路径：{{path}}",
+    "download": "下载",
+    "more_options": "更多选项",
+    "reload": "重新加载",
+    "select_a_file_to_view": "选择要查看的文件",
+    "sensitive_file_avoid_sharing_your_screen_while_v": "敏感文件 — 查看凭证时请避免共享屏幕",
+    "tip_ctrl_cmd_f_to_search": "提示：Ctrl/Cmd+F 搜索",
+    "truncated": "· 已截断"
+  },
+  "manifest": {
+    "use_case_1": "在不授予页面写入权限的前提下，读取、搜索、预览、下载或讨论网关主机上的文件。",
+    "configuration_1": "启用应用并从路径栏打开允许访问的目录；无需账号，git 和 ripgrep 仅用于增强可选的状态显示与搜索。",
+    "description": "不用离开仪表板，就能浏览和阅读运行 Kiro Crew 那台机器上的文件。多个文件在标签页里同时打开，沿目录树浏览时每个文件旁边都显示 git 状态，可以在整个文件夹里搜字符串，markdown 也是渲染后阅读而不是看源码。它按设计就是只读的：只打开和搜索文件，从不编辑、移动或删除，可访问范围仅限主目录、系统临时目录，以及 Linux 和 macOS 上的 /home、/opt 和 /workplace 目录树。",
+    "display_name": "文件",
+    "highlight_1": "只读：只打开和搜索文件，从不写入、移动或删除",
+    "highlight_2": "多个文件在标签页里同时打开，带语法高亮",
+    "highlight_3": "Markdown 文件渲染为排版后的文本，而不是原始源码",
+    "highlight_4": "目录树在每个文件旁直接显示 git 状态",
+    "highlight_5": "跨目录搜索，给出行级匹配和上下文预览",
+    "highlight_6": "可访问路径仅限主目录、系统临时目录，以及 Linux 和 macOS 上的 /home、/opt 和 /workplace — 指向外部的符号链接会被拒绝",
+    "page_label": "文件"
+  },
+  "pathBar": {
+    "click_to_edit_path": "点击编辑路径",
+    "folder_path": "文件夹路径",
+    "path_to_folder": "/path/to/folder",
+    "refresh_folder": "刷新文件夹"
+  },
+  "searchPanel": {
+    "capped": "（已截断）",
+    "close_esc": "关闭 (Esc)",
+    "close_search": "关闭搜索",
+    "comma_separated_glob_patterns": "以逗号分隔的 glob 模式",
+    "glob_e_g_md": "glob（例如 *.md）",
+    "glob_filter_comma_separated_patterns": "Glob 过滤（以逗号分隔的模式）",
+    "no_matches": "无匹配项",
+    "search_failed": "搜索失败",
+    "search_in": "在 {{name}} 中搜索",
+    "search_in_2": "在 {{name}} 中搜索…",
+    "searching": "正在搜索…"
+  },
+  "tabStrip": {
+    "close_file_tab": "关闭文件标签页",
+    "close_workspace_tab": "关闭工作区标签页",
+    "new_workspace_tab": "新建工作区标签页",
+    "new_workspace_tab_ctrl_cmd_t": "新建工作区标签页 (Ctrl/Cmd+T)",
+    "rename_workspace_tab": "重命名工作区标签页"
+  },
+  "treeNode": {
+    "loading": "加载中…"
+  },
+  "common": {
+    "app_disabled_title": "此应用已停用",
+    "app_disabled_hint": "在“应用”中启用后即可使用。",
+    "apps": "应用",
+    "result_count_other": "{{count}} 个结果",
+    "dismiss": "忽略"
+  }
+}

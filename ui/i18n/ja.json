@@ -1,0 +1,79 @@
+{
+  "fileExplorerPage": {
+    "backend_not_reachable": "バックエンドに到達できません：",
+    "cannot_open_folder": "このフォルダーを開けません",
+    "folder_unavailable": "このフォルダーは利用できません。",
+    "go_to_parent_folder": "親フォルダーへ移動",
+    "chat_about_this": "これについてチャット",
+    "copy_path": "パスをコピー",
+    "open": "開く",
+    "open_as_workspace_root": "ワークスペースルートとして開く",
+    "resize_panel": "パネルサイズ変更",
+    "reveal_parent": "親を表示",
+    "link_open_failed": "「{{path}}」を開けませんでした。",
+    "link_target_missing": "そのパスにはファイルもフォルダーもありません。",
+    "link_target_relative": "「{{path}}」は開けません。リンクには完全なパスが必要です。",
+    "link_target_unsupported": "そのパスはファイルでもフォルダーでもありません。"
+  },
+  "fileViewer": {
+    "binary_file": "バイナリファイル",
+    "copy_path": "パスをコピー",
+    "copy_path_2": "パスをコピー：{{path}}",
+    "download": "ダウンロード",
+    "more_options": "その他のオプション",
+    "reload": "再読み込み",
+    "select_a_file_to_view": "表示するファイルを選択",
+    "sensitive_file_avoid_sharing_your_screen_while_v": "機密ファイル — 認証情報を表示しながら画面を共有しないでください",
+    "tip_ctrl_cmd_f_to_search": "ヒント: Ctrl/Cmd+Fで検索",
+    "truncated": "· 省略"
+  },
+  "manifest": {
+    "use_case_1": "ページに書き込みアクセスを与えず、ゲートウェイホスト上のファイルを読み取り、検索、プレビュー、ダウンロード、またはチャットで相談できます。",
+    "configuration_1": "アプリを有効にし、パスバーから許可されたディレクトリを開きます。アカウントは不要で、git または ripgrep は任意のステータス表示と検索機能を追加するだけです。",
+    "description": "Kiro Crewが実行されているマシン上のファイルを閲覧して読み込み、ダッシュボードを離れる必要がありません。複数のファイルをタブで開いたままにして、各ファイルのGitステータスを表示させながらディレクトリツリーを操作して、フォルダー全体の文字列を検索して、マークダウンをレンダリングされたものとして読み込みます。設計上は読み取り専用です。ファイルを開いて検索しますが、決して編集、移動、削除することはなく、ホームディレクトリ、システムの一時ディレクトリ、および Linux と macOS では /home、/opt、/workplace のツリーのみにアクセスできます。",
+    "display_name": "ファイル",
+    "highlight_1": "読み取り専用：ファイルを開いて検索しますが、決して書き込み、移動、削除しません",
+    "highlight_2": "複数のファイルが同時にタブで開かれ、構文ハイライトが表示",
+    "highlight_3": "Markdown ファイルを、未加工のソースではなく整形済みテキストとして表示",
+    "highlight_4": "ディレクトリツリーは各ファイルのGitステータスをインラインで表示",
+    "highlight_5": "マッチレベルと周辺プレビューを含むディレクトリ全体で検索",
+    "highlight_6": "到達可能なパスはホームディレクトリ、システムの一時ディレクトリ、および Linux と macOS では /home、/opt、/workplace に制限 — 外部へのシンボリックリンクは拒否",
+    "page_label": "ファイル"
+  },
+  "pathBar": {
+    "click_to_edit_path": "クリックしてパスを編集",
+    "folder_path": "フォルダーパス",
+    "path_to_folder": "/パス/フォルダー",
+    "refresh_folder": "フォルダーを更新"
+  },
+  "searchPanel": {
+    "capped": "（上限あり）",
+    "close_esc": "閉じる (Esc)",
+    "close_search": "検索を閉じる",
+    "comma_separated_glob_patterns": "カンマ区切りのグロブパターン",
+    "glob_e_g_md": "グロブ（例 *.md）",
+    "glob_filter_comma_separated_patterns": "グロブフィルタ（カンマ区切りパターン）",
+    "no_matches": "マッチしません",
+    "search_failed": "検索に失敗しました",
+    "search_in": "{{name}} 内を検索",
+    "search_in_2": "{{name}} 内を検索…",
+    "searching": "検索中…"
+  },
+  "tabStrip": {
+    "close_file_tab": "ファイルタブを閉じる",
+    "close_workspace_tab": "ワークスペースタブを閉じる",
+    "new_workspace_tab": "新しいワークスペースタブ",
+    "new_workspace_tab_ctrl_cmd_t": "新しいワークスペースタブ (Ctrl/Cmd+T)",
+    "rename_workspace_tab": "ワークスペースタブの名前を変更"
+  },
+  "treeNode": {
+    "loading": "読み込み中…"
+  },
+  "common": {
+    "app_disabled_title": "このアプリは無効です",
+    "app_disabled_hint": "使用するにはアプリからこのアプリを有効にしてください。",
+    "apps": "アプリ",
+    "result_count_other": "{{count}} 件の結果",
+    "dismiss": "閉じる"
+  }
+}

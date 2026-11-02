@@ -1,0 +1,210 @@
+{
+  "name": "file-explorer",
+  "version": "1.0.0",
+  "displayName": "Files",
+  "description": "Browse and read files on the machine running Kiro Crew without leaving the dashboard. Keep several files open in tabs, walk the directory tree with each file's git status shown beside it, search a whole folder for a string, and read markdown rendered rather than raw. It is read-only by design: it opens and searches files but never edits, moves, or deletes them, and it can only reach your home directory, the system temp directory, and on Linux and macOS the /home, /opt, and /workplace trees.",
+  "author": "kirocrew",
+  "license": "Apache-2.0",
+  "minKiroCrewVersion": "0.12.0",
+  "tags": [
+    "files",
+    "explorer",
+    "productivity",
+    "code",
+    "markdown"
+  ],
+  "highlights": [
+    "Read-only: opens and searches files, and never writes, moves, or deletes them",
+    "Multiple files open at once in tabs, with syntax highlighting",
+    "Markdown files render as formatted text instead of raw source",
+    "Directory tree shows each file's git status inline",
+    "Search across a directory with line-level matches and surrounding preview",
+    "Reachable paths are your home directory, the system temp directory, and on Linux and macOS /home /opt, and /workplace — symlinks out are refused"
+  ],
+  "defaultEnabled": false,
+  "platform": {
+    "os": [
+      "macos",
+      "linux",
+      "windows"
+    ]
+  },
+  "iconPath": "assets/icon.png",
+  "heroImage": "assets/hero-light.png",
+  "heroImageDark": "assets/hero-dark.png",
+  "heroImageDetail": "assets/hero-detail-light.png",
+  "heroImageDetailDark": "assets/hero-detail-dark.png",
+  "permissions": {
+    "api": [
+      "/apps/file-explorer/api"
+    ]
+  },
+  "backend": {
+    "entryPoint": "backend/server.py",
+    "port": "auto",
+    "healthCheck": "/health"
+  },
+  "ui": {
+    "entry": "dist/index.mjs",
+    "pages": [
+      {
+        "route": "/apps/file-explorer",
+        "label": "Files"
+      }
+    ]
+  },
+  "useCases": [
+    "Read, search, preview, download, or discuss files on the gateway host without granting the page write access."
+  ],
+  "configuration": [
+    "Enable the app and open an allowed directory from the path bar; no account is required, and git or ripgrep only add optional status and search enhancements."
+  ],
+  "screenshots": [
+    "assets/screenshot-main.png"
+  ],
+  "l10n": {
+    "bn": {
+      "displayName": "ফাইল",
+      "description": "ড্যাশবোর্ড ছেড়ে না গিয়েই Kiro Crew যে মেশিনে চলছে সেখানকার ফাইল ঘেঁটে দেখো ও পড়ো। কয়েকটি ফাইল একসঙ্গে ট্যাবে খোলা রাখো, প্রতিটি ফাইলের পাশে তার git অবস্থা দেখতে দেখতে ডিরেক্টরি ট্রি ঘুরে দেখো, পুরো একটি ফোল্ডারে কোনো লেখা খোঁজো, আর markdown কাঁচা সোর্স নয় — সাজানো অবস্থায় পড়ো। এটি ইচ্ছে করেই শুধু-পঠন: ফাইল খোলে ও খোঁজে, কিন্তু কখনও সম্পাদনা, সরানো বা মোছে না; আর কেবল তোমার হোম ডিরেক্টরি, সিস্টেমের টেম্প ডিরেক্টরি, এবং Linux ও macOS-এ /home, /opt ও /workplace পর্যন্ত পৌঁছাতে পারে।",
+      "pageLabel": "ফাইল",
+      "highlights": [
+        "শুধু-পঠন: ফাইল খোলে ও খোঁজে, কখনও লেখে, সরায় বা মোছে না",
+        "সিনট্যাক্স হাইলাইটিং সহ একসঙ্গে অনেক ফাইল ট্যাবে খোলা থাকে",
+        "Markdown ফাইল কাঁচা সোর্সের বদলে সাজানো লেখা হিসেবে দেখা যায়",
+        "ডিরেক্টরি ট্রিতে প্রতিটি ফাইলের git অবস্থা পাশেই দেখা যায়",
+        "পুরো একটি ডিরেক্টরিতে খোঁজো — লাইন ধরে মিল আর আশপাশের প্রিভিউ সহ",
+        "পৌঁছানোর পথ শুধু তোমার হোম ডিরেক্টরি, সিস্টেমের টেম্প ডিরেক্টরি, এবং Linux ও macOS-এ /home, /opt ও /workplace পর্যন্ত — বাইরে যাওয়া symlink গ্রহণ করা হয় না"
+      ]
+    },
+    "de": {
+      "displayName": "Dateien",
+      "description": "Durchsuche und lies Dateien auf dem Rechner, der Kiro Crew ausführt, ohne das Dashboard zu verlassen. Halte mehrere Dateien in Tabs offen, gehe den Verzeichnisbaum durch, in dem neben jeder Datei ihr Git-Status steht, suche in einem ganzen Ordner nach einer Zeichenfolge und lies Markdown gerendert statt im Rohtext. Der Zugriff ist bewusst nur lesend: Dateien werden geöffnet und durchsucht, aber nie bearbeitet, verschoben oder gelöscht, und erreichbar sind nur dein Home-Verzeichnis, das temporäre Systemverzeichnis und unter Linux und macOS die Bäume /home, /opt und /workplace.",
+      "pageLabel": "Dateien",
+      "highlights": [
+        "Schreibgeschützt: öffnet und durchsucht Dateien und schreibt, verschiebt oder löscht sie nie",
+        "Mehrere Dateien gleichzeitig in Tabs offen, mit Syntaxhervorhebung",
+        "Markdown-Dateien werden als formatierter Text statt als Rohquelle dargestellt",
+        "Der Verzeichnisbaum zeigt den Git-Status jeder Datei direkt an",
+        "Suche über ein Verzeichnis hinweg mit Treffern auf Zeilenebene und umgebender Vorschau",
+        "Erreichbare Pfade sind auf dein Home-Verzeichnis, das temporäre Systemverzeichnis und unter Linux und macOS /home, /opt und /workplace begrenzt — Symlinks nach außen werden abgelehnt"
+      ]
+    },
+    "es": {
+      "displayName": "Archivos",
+      "description": "Explora y lee archivos en la máquina que ejecuta Kiro Crew sin salir del panel. Mantén varios archivos abiertos en pestañas, recorre el árbol de directorios con el estado de git de cada archivo al lado, busca una cadena en toda una carpeta y lee el markdown renderizado en lugar del código fuente. Es de solo lectura por diseño: abre y busca archivos, pero nunca los edita, los mueve ni los elimina, y solo puede llegar a tu directorio home, al directorio temporal del sistema y, en Linux y macOS, a los árboles /home, /opt y /workplace.",
+      "pageLabel": "Archivos",
+      "highlights": [
+        "Solo lectura: abre y busca archivos, y nunca los escribe, los mueve ni los elimina",
+        "Varios archivos abiertos a la vez en pestañas, con resaltado de sintaxis",
+        "Los archivos Markdown se muestran como texto con formato en lugar del código fuente",
+        "El árbol de directorios muestra el estado de git de cada archivo en línea",
+        "Busca en un directorio con coincidencias por línea y una vista previa del contexto",
+        "Las rutas accesibles se limitan a tu directorio home, al directorio temporal del sistema y, en Linux y macOS, a /home, /opt y /workplace — los enlaces simbólicos hacia fuera se rechazan"
+      ]
+    },
+    "fr": {
+      "displayName": "Fichiers",
+      "description": "Parcours et lis les fichiers de la machine qui exécute Kiro Crew sans quitter le tableau de bord. Garde plusieurs fichiers ouverts dans des onglets, explore l’arborescence avec le statut git de chaque fichier affiché à côté, cherche une chaîne dans tout un dossier et lis le markdown rendu plutôt que brut. Il est en lecture seule par conception : il ouvre les fichiers et y effectue des recherches, mais ne les modifie, déplace ni supprime jamais, et il ne peut atteindre que ton répertoire personnel, le répertoire temporaire du système et, sous Linux et macOS, les arborescences /home, /opt et /workplace.",
+      "pageLabel": "Fichiers",
+      "highlights": [
+        "Lecture seule : ouvre les fichiers et y effectue des recherches, sans jamais les écrire, les déplacer ni les supprimer",
+        "Plusieurs fichiers ouverts en même temps dans des onglets, avec coloration syntaxique",
+        "Les fichiers Markdown s’affichent en texte mis en forme au lieu du source brut",
+        "L’arborescence affiche le statut git de chaque fichier en ligne",
+        "Recherche dans un dossier entier, avec correspondances à la ligne et aperçu du contexte",
+        "Les chemins accessibles sont limités à ton répertoire personnel, au répertoire temporaire du système et, sous Linux et macOS, à /home, /opt et /workplace — les liens symboliques qui en sortent sont refusés"
+      ]
+    },
+    "hi": {
+      "displayName": "फ़ाइलें",
+      "description": "डैशबोर्ड छोड़े बिना Kiro Crew चला रही मशीन की फ़ाइलें ब्राउज़ करो और पढ़ो। कई फ़ाइलें टैब में खुली रखो, डायरेक्टरी ट्री में हर फ़ाइल की git स्थिति साथ में देखते हुए घूमो, पूरे फ़ोल्डर में कोई स्ट्रिंग खोजो, और markdown को कच्चे रूप की जगह रेंडर होकर पढ़ो। यह डिज़ाइन से ही रीड-ओनली है: यह फ़ाइलें खोलता और खोजता है पर उन्हें कभी नहीं बदलता, हटाता या मिटाता, और यह सिर्फ़ तुम्हारी होम डायरेक्टरी, सिस्टम की टेम्प डायरेक्टरी, और Linux व macOS पर /home, /opt और /workplace तक पहुँच सकता है।",
+      "pageLabel": "फ़ाइलें",
+      "highlights": [
+        "रीड-ओनली: फ़ाइलें खोलता और खोजता है, और उन्हें कभी नहीं लिखता, हटाता या मिटाता",
+        "सिंटैक्स हाइलाइटिंग के साथ एक ही वक़्त कई फ़ाइलें टैब में खुलती हैं",
+        "Markdown फ़ाइलें कच्चे सोर्स की जगह फ़ॉर्मैट किए टेक्स्ट के रूप में रेंडर होती हैं",
+        "डायरेक्टरी ट्री हर फ़ाइल की git स्थिति साथ ही दिखाता है",
+        "पूरी डायरेक्टरी में खोजो, लाइन-स्तर के मैच और आस-पास का प्रीव्यू मिलता है",
+        "पहुँच वाले पाथ तुम्हारी होम डायरेक्टरी, सिस्टम की टेम्प डायरेक्टरी, और Linux व macOS पर /home, /opt और /workplace तक सीमित हैं — बाहर जाते सिमलिंक मना कर दिए जाते हैं"
+      ]
+    },
+    "it": {
+      "displayName": "File",
+      "description": "Sfoglia e leggi i file sulla macchina che esegue Kiro Crew senza uscire dalla dashboard. Tieni aperti più file in schede, percorri l’albero delle cartelle con accanto lo stato git di ciascun file, cerca una stringa in un’intera cartella e leggi il markdown formattato anziché grezzo. È di sola lettura per scelta: apre e cerca nei file ma non li modifica, non li sposta e non li elimina mai, e può raggiungere solo la tua home, la directory temporanea di sistema e, su Linux e macOS, gli alberi /home, /opt e /workplace.",
+      "pageLabel": "File",
+      "highlights": [
+        "Sola lettura: apre e cerca nei file, e non li scrive, sposta o elimina mai",
+        "Più file aperti contemporaneamente in schede, con evidenziazione della sintassi",
+        "I file Markdown vengono resi come testo formattato invece che come sorgente grezzo",
+        "L’albero delle cartelle mostra in linea lo stato git di ogni file",
+        "Cerca in tutta una cartella con corrispondenze riga per riga e anteprima del contesto",
+        "I percorsi raggiungibili si limitano alla tua home, alla directory temporanea di sistema e, su Linux e macOS, a /home, /opt e /workplace — i symlink che escono da lì vengono rifiutati"
+      ]
+    },
+    "ja": {
+      "displayName": "ファイル",
+      "description": "Kiro Crewが実行されているマシン上のファイルを閲覧して読み込み、ダッシュボードを離れる必要がありません。複数のファイルをタブで開いたままにして、各ファイルのGitステータスを表示させながらディレクトリツリーを操作して、フォルダー全体の文字列を検索して、マークダウンをレンダリングされたものとして読み込みます。設計上は読み取り専用です。ファイルを開いて検索しますが、決して編集、移動、削除することはなく、ホームディレクトリ、システムの一時ディレクトリ、および Linux と macOS では /home、/opt、/workplace のツリーのみにアクセスできます。",
+      "pageLabel": "ファイル",
+      "highlights": [
+        "読み取り専用：ファイルを開いて検索しますが、決して書き込み、移動、削除しません",
+        "複数のファイルが同時にタブで開かれ、構文ハイライトが表示",
+        "Markdown ファイルを、未加工のソースではなく整形済みテキストとして表示",
+        "ディレクトリツリーは各ファイルのGitステータスをインラインで表示",
+        "マッチレベルと周辺プレビューを含むディレクトリ全体で検索",
+        "到達可能なパスはホームディレクトリ、システムの一時ディレクトリ、および Linux と macOS では /home、/opt、/workplace に制限 — 外部へのシンボリックリンクは拒否"
+      ]
+    },
+    "ko": {
+      "displayName": "파일",
+      "description": "대시보드를 벗어나지 않고 Kiro Crew가 실행 중인 머신의 파일을 살펴보고 읽습니다. 여러 파일을 탭으로 열어 두고, 각 파일의 git 상태가 옆에 표시되는 디렉터리 트리를 따라 이동하고, 폴더 전체에서 문자열을 검색하고, Markdown을 원본이 아닌 렌더링된 형태로 읽을 수 있습니다. 설계상 읽기 전용입니다. 파일을 열고 검색하지만 편집·이동·삭제는 절대 하지 않으며, 접근 범위는 홈 디렉터리, 시스템 임시 디렉터리, 그리고 Linux와 macOS에서는 /home, /opt, /workplace 트리로 한정됩니다.",
+      "pageLabel": "파일",
+      "highlights": [
+        "읽기 전용: 파일을 열고 검색하며, 쓰기·이동·삭제는 하지 않습니다",
+        "여러 파일을 탭으로 동시에 열고 구문 강조를 표시",
+        "Markdown 파일을 원본 소스가 아닌 서식이 적용된 텍스트로 표시",
+        "디렉터리 트리에 각 파일의 git 상태를 함께 표시",
+        "줄 단위 일치와 주변 미리 보기를 포함해 디렉터리 전체를 검색",
+        "접근 가능한 경로는 홈 디렉터리, 시스템 임시 디렉터리, 그리고 Linux와 macOS에서는 /home과 /opt, /workplace로 제한 — 바깥으로 향하는 심볼릭 링크는 거부"
+      ]
+    },
+    "pt": {
+      "displayName": "Arquivos",
+      "description": "Navegue e leia arquivos na máquina que executa o Kiro Crew sem sair do painel. Mantenha vários arquivos abertos em abas, percorra a árvore de diretórios com o status git de cada arquivo ao lado, pesquise um texto em uma pasta inteira e leia markdown renderizado em vez de bruto. É somente leitura por princípio: abre e pesquisa arquivos, mas nunca os edita, move ou exclui, e só alcança o seu diretório pessoal, o diretório temporário do sistema e, no Linux e no macOS, as árvores /home, /opt e /workplace.",
+      "pageLabel": "Arquivos",
+      "highlights": [
+        "Somente leitura: abre e pesquisa arquivos e nunca os grava, move ou exclui",
+        "Vários arquivos abertos ao mesmo tempo em abas, com realce de sintaxe",
+        "Arquivos Markdown são exibidos como texto formatado, em vez do código bruto",
+        "A árvore de diretórios mostra o status git de cada arquivo na própria linha",
+        "Pesquise em um diretório inteiro, com correspondências por linha e uma prévia do entorno",
+        "Os caminhos acessíveis se limitam ao seu diretório pessoal, ao diretório temporário do sistema e, no Linux e no macOS, a /home, /opt e /workplace — links simbólicos para fora são recusados"
+      ]
+    },
+    "ru": {
+      "displayName": "Файлы",
+      "description": "Просматривай и читай файлы на машине с Kiro Crew, не покидая панель. Держи несколько файлов открытыми во вкладках, ходи по дереву каталогов, где рядом с каждым файлом виден его статус в git, ищи строку по всей папке и читай markdown в отрисованном виде, а не в исходнике. Приложение принципиально только для чтения: оно открывает и ищет файлы, но никогда их не правит, не перемещает и не удаляет, а доступны ему только домашний каталог, системный временный каталог и, на Linux и macOS, деревья /home, /opt и /workplace.",
+      "pageLabel": "Файлы",
+      "highlights": [
+        "Только чтение: открывает и ищет файлы, но никогда не записывает, не перемещает и не удаляет их",
+        "Несколько файлов открыты одновременно во вкладках, с подсветкой синтаксиса",
+        "Файлы Markdown показываются как форматированный текст, а не как исходник",
+        "В дереве каталогов рядом с каждым файлом виден его статус в git",
+        "Поиск по каталогу с совпадениями по строкам и предпросмотром вокруг них",
+        "Доступные пути ограничены домашним каталогом, системным временным каталогом и, на Linux и macOS, /home, /opt и /workplace — символические ссылки за их пределы отклоняются"
+      ]
+    },
+    "zh-CN": {
+      "displayName": "文件",
+      "description": "不用离开仪表板，就能浏览和阅读运行 Kiro Crew 那台机器上的文件。多个文件在标签页里同时打开，沿目录树浏览时每个文件旁边都显示 git 状态，可以在整个文件夹里搜字符串，markdown 也是渲染后阅读而不是看源码。它按设计就是只读的：只打开和搜索文件，从不编辑、移动或删除，可访问范围仅限主目录、系统临时目录，以及 Linux 和 macOS 上的 /home、/opt 和 /workplace 目录树。",
+      "pageLabel": "文件",
+      "highlights": [
+        "只读：只打开和搜索文件，从不写入、移动或删除",
+        "多个文件在标签页里同时打开，带语法高亮",
+        "Markdown 文件渲染为排版后的文本，而不是原始源码",
+        "目录树在每个文件旁直接显示 git 状态",
+        "跨目录搜索，给出行级匹配和上下文预览",
+        "可访问路径仅限主目录、系统临时目录，以及 Linux 和 macOS 上的 /home、/opt 和 /workplace — 指向外部的符号链接会被拒绝"
+      ]
+    }
+  }
+}

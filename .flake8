@@ -1,0 +1,4 @@
+[flake8]
+max-line-length = 100
+# black formats slices as `a[i : j]`.
+extend-ignore = E203

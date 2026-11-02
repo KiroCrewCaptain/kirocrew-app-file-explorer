@@ -1,0 +1,80 @@
+{
+  "fileExplorerPage": {
+    "backend_not_reachable": "ব্যাকএন্ডে পৌঁছানো যাচ্ছে না:",
+    "cannot_open_folder": "এই ফোল্ডারটি খোলা যায়নি",
+    "folder_unavailable": "এই ফোল্ডারটি উপলব্ধ নেই।",
+    "go_to_parent_folder": "প্যারেন্ট ফোল্ডারে যান",
+    "chat_about_this": "এটি নিয়ে চ্যাট করুন",
+    "copy_path": "পাথ কপি করুন",
+    "open": "খুলুন",
+    "open_as_workspace_root": "ওয়ার্কস্পেস রুট হিসেবে খুলুন",
+    "resize_panel": "প্যানেলের আকার বদলান",
+    "reveal_parent": "প্যারেন্ট ফোল্ডার দেখান",
+    "link_open_failed": "{{path}} খোলা যায়নি।",
+    "link_target_missing": "এই পাথে কোনো ফাইল বা ফোল্ডার নেই।",
+    "link_target_relative": "{{path}} খোলা যায় না: লিংকের জন্য সম্পূর্ণ পাথ লাগে।",
+    "link_target_unsupported": "এই পাথটি কোনো ফাইল বা ফোল্ডার নয়।"
+  },
+  "fileViewer": {
+    "binary_file": "বাইনারি ফাইল",
+    "copy_path": "পাথ কপি করুন",
+    "copy_path_2": "পাথ কপি করো: {{path}}",
+    "download": "ডাউনলোড",
+    "more_options": "আরও অপশন",
+    "reload": "রিলোড",
+    "select_a_file_to_view": "দেখার জন্য একটি ফাইল নির্বাচন করুন",
+    "sensitive_file_avoid_sharing_your_screen_while_v": "সংবেদনশীল ফাইল — ক্রেডেনশিয়াল দেখার সময় স্ক্রিন শেয়ার করা এড়িয়ে চলুন",
+    "tip_ctrl_cmd_f_to_search": "টিপ: সার্চ করতে Ctrl/Cmd+F চাপুন",
+    "truncated": "· সংক্ষিপ্ত করা হয়েছে"
+  },
+  "manifest": {
+    "description": "ড্যাশবোর্ড ছেড়ে না গিয়েই Kiro Crew যে মেশিনে চলছে সেখানকার ফাইল ঘেঁটে দেখো ও পড়ো। কয়েকটি ফাইল একসঙ্গে ট্যাবে খোলা রাখো, প্রতিটি ফাইলের পাশে তার git অবস্থা দেখতে দেখতে ডিরেক্টরি ট্রি ঘুরে দেখো, পুরো একটি ফোল্ডারে কোনো লেখা খোঁজো, আর markdown কাঁচা সোর্স নয় — সাজানো অবস্থায় পড়ো। এটি ইচ্ছে করেই শুধু-পঠন: ফাইল খোলে ও খোঁজে, কিন্তু কখনও সম্পাদনা, সরানো বা মোছে না; আর কেবল তোমার হোম ডিরেক্টরি, সিস্টেমের টেম্প ডিরেক্টরি, এবং Linux ও macOS-এ /home, /opt ও /workplace পর্যন্ত পৌঁছাতে পারে।",
+    "display_name": "ফাইল",
+    "use_case_1": "পেজকে লেখার অনুমতি না দিয়েই gateway host-এর file পড়ুন, খুঁজুন, preview বা download করুন এবং সেগুলো নিয়ে আলোচনা করুন।",
+    "configuration_1": "অ্যাপটি চালু করে path bar থেকে একটি অনুমোদিত directory খুলুন; কোনো account লাগে না, আর git বা ripgrep শুধু ঐচ্ছিক status ও উন্নত search যোগ করে।",
+    "highlight_1": "শুধু-পঠন: ফাইল খোলে ও খোঁজে, কখনও লেখে, সরায় বা মোছে না",
+    "highlight_2": "সিনট্যাক্স হাইলাইটিং সহ একসঙ্গে অনেক ফাইল ট্যাবে খোলা থাকে",
+    "highlight_3": "Markdown ফাইল কাঁচা সোর্সের বদলে সাজানো লেখা হিসেবে দেখা যায়",
+    "highlight_4": "ডিরেক্টরি ট্রিতে প্রতিটি ফাইলের git অবস্থা পাশেই দেখা যায়",
+    "highlight_5": "পুরো একটি ডিরেক্টরিতে খোঁজো — লাইন ধরে মিল আর আশপাশের প্রিভিউ সহ",
+    "highlight_6": "পৌঁছানোর পথ শুধু তোমার হোম ডিরেক্টরি, সিস্টেমের টেম্প ডিরেক্টরি, এবং Linux ও macOS-এ /home, /opt ও /workplace পর্যন্ত — বাইরে যাওয়া symlink গ্রহণ করা হয় না",
+    "page_label": "ফাইল"
+  },
+  "pathBar": {
+    "click_to_edit_path": "পাথ সম্পাদনা করতে ক্লিক করুন",
+    "folder_path": "ফোল্ডার পাথ",
+    "path_to_folder": "/path/to/folder",
+    "refresh_folder": "ফোল্ডার রিফ্রেশ করো"
+  },
+  "searchPanel": {
+    "capped": "(সীমিত)",
+    "close_esc": "বন্ধ করুন (Esc)",
+    "close_search": "সার্চ বন্ধ করুন",
+    "comma_separated_glob_patterns": "কমা দিয়ে আলাদা করা glob প্যাটার্ন",
+    "glob_e_g_md": "glob (যেমন *.md)",
+    "glob_filter_comma_separated_patterns": "glob ফিল্টার (কমা দিয়ে আলাদা করা প্যাটার্ন)",
+    "no_matches": "কোনো মিল নেই",
+    "search_failed": "খোঁজা যায়নি",
+    "search_in": "{{name}}-এ খোঁজো",
+    "search_in_2": "{{name}}-এ খোঁজো...",
+    "searching": "খোঁজা হচ্ছে..."
+  },
+  "tabStrip": {
+    "close_file_tab": "ফাইল ট্যাব বন্ধ করুন",
+    "close_workspace_tab": "ওয়ার্কস্পেস ট্যাব বন্ধ করুন",
+    "new_workspace_tab": "নতুন ওয়ার্কস্পেস ট্যাব",
+    "new_workspace_tab_ctrl_cmd_t": "নতুন ওয়ার্কস্পেস ট্যাব (Ctrl/Cmd+T)",
+    "rename_workspace_tab": "ওয়ার্কস্পেস ট্যাবের নাম বদলান"
+  },
+  "treeNode": {
+    "loading": "লোড হচ্ছে..."
+  },
+  "common": {
+    "app_disabled_title": "এই অ্যাপটি বন্ধ করা আছে",
+    "app_disabled_hint": "এটি ব্যবহার করতে অ্যাপস থেকে এই অ্যাপটি চালু করুন।",
+    "apps": "অ্যাপস",
+    "result_count_one": "{{count}}টি ফলাফল",
+    "result_count_other": "{{count}}টি ফলাফল",
+    "dismiss": "খারিজ করুন"
+  }
+}

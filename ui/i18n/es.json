@@ -1,0 +1,81 @@
+{
+  "fileExplorerPage": {
+    "backend_not_reachable": "Backend no accesible:",
+    "cannot_open_folder": "No se puede abrir esta carpeta",
+    "folder_unavailable": "Esta carpeta no está disponible.",
+    "go_to_parent_folder": "Ir a la carpeta principal",
+    "chat_about_this": "Chatear sobre esto",
+    "copy_path": "Copiar ruta",
+    "open": "Abrir",
+    "open_as_workspace_root": "Abrir como raíz del espacio de trabajo",
+    "resize_panel": "Redimensionar panel",
+    "reveal_parent": "Mostrar la carpeta superior",
+    "link_open_failed": "No se pudo abrir {{path}}.",
+    "link_target_missing": "No hay ningún archivo ni carpeta en esa ruta.",
+    "link_target_relative": "No se puede abrir {{path}}: los enlaces necesitan una ruta completa.",
+    "link_target_unsupported": "Esa ruta no es un archivo ni una carpeta."
+  },
+  "fileViewer": {
+    "binary_file": "Archivo binario",
+    "copy_path": "Copiar ruta",
+    "copy_path_2": "Copiar ruta: {{path}}",
+    "download": "Descargar",
+    "more_options": "Más opciones",
+    "reload": "Recargar",
+    "select_a_file_to_view": "Selecciona un archivo para verlo",
+    "sensitive_file_avoid_sharing_your_screen_while_v": "Archivo sensible — evita compartir tu pantalla mientras ves credenciales",
+    "tip_ctrl_cmd_f_to_search": "Consejo: Ctrl/Cmd+F para buscar",
+    "truncated": "· truncado"
+  },
+  "manifest": {
+    "description": "Explora y lee archivos en la máquina que ejecuta Kiro Crew sin salir del panel. Mantén varios archivos abiertos en pestañas, recorre el árbol de directorios con el estado de git de cada archivo al lado, busca una cadena en toda una carpeta y lee el markdown renderizado en lugar del código fuente. Es de solo lectura por diseño: abre y busca archivos, pero nunca los edita, los mueve ni los elimina, y solo puede llegar a tu directorio home, al directorio temporal del sistema y, en Linux y macOS, a los árboles /home, /opt y /workplace.",
+    "display_name": "Archivos",
+    "highlight_1": "Solo lectura: abre y busca archivos, y nunca los escribe, los mueve ni los elimina",
+    "highlight_2": "Varios archivos abiertos a la vez en pestañas, con resaltado de sintaxis",
+    "highlight_3": "Los archivos Markdown se muestran como texto con formato en lugar del código fuente",
+    "highlight_4": "El árbol de directorios muestra el estado de git de cada archivo en línea",
+    "highlight_5": "Busca en un directorio con coincidencias por línea y una vista previa del contexto",
+    "highlight_6": "Las rutas accesibles se limitan a tu directorio home, al directorio temporal del sistema y, en Linux y macOS, a /home, /opt y /workplace — los enlaces simbólicos hacia fuera se rechazan",
+    "page_label": "Archivos",
+    "use_case_1": "Lee, busca, previsualiza, descarga o comenta archivos del host del gateway sin conceder a la página acceso de escritura.",
+    "configuration_1": "Activa la app y abre un directorio permitido desde la barra de ruta; no se requiere ninguna cuenta, y Git o ripgrep solo añaden funciones opcionales de estado y búsqueda."
+  },
+  "pathBar": {
+    "click_to_edit_path": "Clic para editar la ruta",
+    "folder_path": "Ruta de la carpeta",
+    "path_to_folder": "/path/to/folder",
+    "refresh_folder": "Actualizar carpeta"
+  },
+  "searchPanel": {
+    "capped": "(limitado)",
+    "close_esc": "Cerrar (Esc)",
+    "close_search": "Cerrar la búsqueda",
+    "comma_separated_glob_patterns": "Patrones glob separados por comas",
+    "glob_e_g_md": "glob (p. ej. *.md)",
+    "glob_filter_comma_separated_patterns": "Filtro glob (patrones separados por comas)",
+    "no_matches": "Sin coincidencias",
+    "search_failed": "falló la búsqueda",
+    "search_in": "Buscar en {{name}}",
+    "search_in_2": "Buscar en {{name}}…",
+    "searching": "buscando…"
+  },
+  "tabStrip": {
+    "close_file_tab": "Cerrar la pestaña de archivo",
+    "close_workspace_tab": "Cerrar la pestaña del espacio de trabajo",
+    "new_workspace_tab": "Nueva pestaña de espacio de trabajo",
+    "new_workspace_tab_ctrl_cmd_t": "Nueva pestaña de espacio de trabajo (Ctrl/Cmd+T)",
+    "rename_workspace_tab": "Renombrar la pestaña del espacio de trabajo"
+  },
+  "treeNode": {
+    "loading": "cargando..."
+  },
+  "common": {
+    "app_disabled_title": "Esta app está desactivada",
+    "app_disabled_hint": "Activa esta app desde Apps para usarla.",
+    "apps": "Apps",
+    "result_count_many": "{{count}} resultados",
+    "result_count_one": "{{count}} resultado",
+    "result_count_other": "{{count}} resultados",
+    "dismiss": "Descartar"
+  }
+}

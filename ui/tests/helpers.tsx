@@ -1,0 +1,12 @@
+import type { ReactElement } from 'react'
+import { render } from '@testing-library/react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+/** Render under a fresh query client: no retries, so a rejected query settles at once. */
+export function renderWithProviders(ui: ReactElement) {
+  const qc = new QueryClient({
+    defaultOptions: { queries: { retry: false, gcTime: 0 }, mutations: { retry: false } },
+  })
+  const utils = render(<QueryClientProvider client={qc}>{ui}</QueryClientProvider>)
+  return { ...utils, qc }
+}

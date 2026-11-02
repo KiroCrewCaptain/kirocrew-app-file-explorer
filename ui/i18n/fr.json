@@ -1,0 +1,81 @@
+{
+  "fileExplorerPage": {
+    "backend_not_reachable": "Backend inaccessible :",
+    "cannot_open_folder": "Impossible d’ouvrir ce dossier",
+    "folder_unavailable": "Ce dossier n’est pas disponible.",
+    "go_to_parent_folder": "Aller au dossier parent",
+    "chat_about_this": "Discuter de ceci",
+    "copy_path": "Copier le chemin",
+    "open": "Ouvrir",
+    "open_as_workspace_root": "Ouvrir comme racine de l'espace de travail",
+    "resize_panel": "Redimensionner le panneau",
+    "reveal_parent": "Afficher le parent",
+    "link_open_failed": "Impossible d’ouvrir {{path}}.",
+    "link_target_missing": "Il n’y a aucun fichier ni dossier à ce chemin.",
+    "link_target_relative": "Impossible d’ouvrir {{path}} : les liens nécessitent un chemin complet.",
+    "link_target_unsupported": "Ce chemin n’est ni un fichier ni un dossier."
+  },
+  "fileViewer": {
+    "binary_file": "Fichier binaire",
+    "copy_path": "Copier le chemin",
+    "copy_path_2": "Copier le chemin : {{path}}",
+    "download": "Télécharger",
+    "more_options": "Plus d'options",
+    "reload": "Recharger",
+    "select_a_file_to_view": "Sélectionnez un fichier à afficher",
+    "sensitive_file_avoid_sharing_your_screen_while_v": "Fichier sensible — évitez de partager votre écran lors de la consultation d'identifiants",
+    "tip_ctrl_cmd_f_to_search": "Astuce : Ctrl/Cmd+F pour rechercher",
+    "truncated": "· tronqué"
+  },
+  "manifest": {
+    "description": "Parcours et lis les fichiers de la machine qui exécute Kiro Crew sans quitter le tableau de bord. Garde plusieurs fichiers ouverts dans des onglets, explore l’arborescence avec le statut git de chaque fichier affiché à côté, cherche une chaîne dans tout un dossier et lis le markdown rendu plutôt que brut. Il est en lecture seule par conception : il ouvre les fichiers et y effectue des recherches, mais ne les modifie, déplace ni supprime jamais, et il ne peut atteindre que ton répertoire personnel, le répertoire temporaire du système et, sous Linux et macOS, les arborescences /home, /opt et /workplace.",
+    "display_name": "Fichiers",
+    "highlight_1": "Lecture seule : ouvre les fichiers et y effectue des recherches, sans jamais les écrire, les déplacer ni les supprimer",
+    "highlight_2": "Plusieurs fichiers ouverts en même temps dans des onglets, avec coloration syntaxique",
+    "highlight_3": "Les fichiers Markdown s’affichent en texte mis en forme au lieu du source brut",
+    "highlight_4": "L’arborescence affiche le statut git de chaque fichier en ligne",
+    "highlight_5": "Recherche dans un dossier entier, avec correspondances à la ligne et aperçu du contexte",
+    "highlight_6": "Les chemins accessibles sont limités à ton répertoire personnel, au répertoire temporaire du système et, sous Linux et macOS, à /home, /opt et /workplace — les liens symboliques qui en sortent sont refusés",
+    "page_label": "Fichiers",
+    "use_case_1": "Lis, recherche, prévisualise, télécharge ou discute des fichiers de l'hôte de la passerelle sans accorder d'accès en écriture à la page.",
+    "configuration_1": "Active l'app et ouvre un dossier autorisé depuis la barre de chemin ; aucun compte n'est requis, et Git ou ripgrep ajoutent seulement des fonctions facultatives d'état et de recherche."
+  },
+  "pathBar": {
+    "click_to_edit_path": "Cliquer pour modifier le chemin",
+    "folder_path": "Chemin du dossier",
+    "path_to_folder": "/path/to/folder",
+    "refresh_folder": "Actualiser le dossier"
+  },
+  "searchPanel": {
+    "capped": "(tronqué)",
+    "close_esc": "Fermer (Échap)",
+    "close_search": "Fermer la recherche",
+    "comma_separated_glob_patterns": "Motifs glob séparés par des virgules",
+    "glob_e_g_md": "glob (ex. *.md)",
+    "glob_filter_comma_separated_patterns": "Filtre glob (motifs séparés par des virgules)",
+    "no_matches": "Aucun résultat",
+    "search_failed": "échec de la recherche",
+    "search_in": "Rechercher dans {{name}}",
+    "search_in_2": "Rechercher dans {{name}}...",
+    "searching": "recherche..."
+  },
+  "tabStrip": {
+    "close_file_tab": "Fermer l'onglet de fichier",
+    "close_workspace_tab": "Fermer l'onglet d'espace de travail",
+    "new_workspace_tab": "Nouvel onglet d'espace de travail",
+    "new_workspace_tab_ctrl_cmd_t": "Nouvel onglet d'espace de travail (Ctrl/Cmd+T)",
+    "rename_workspace_tab": "Renommer l'onglet d'espace de travail"
+  },
+  "treeNode": {
+    "loading": "chargement..."
+  },
+  "common": {
+    "app_disabled_title": "Cette application est désactivée",
+    "app_disabled_hint": "Activez cette application depuis Applications pour l’utiliser.",
+    "apps": "Applications",
+    "result_count_many": "{{count}} résultats",
+    "result_count_one": "{{count}} résultat",
+    "result_count_other": "{{count}} résultats",
+    "dismiss": "Ignorer"
+  }
+}

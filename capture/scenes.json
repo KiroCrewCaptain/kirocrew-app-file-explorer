@@ -1,0 +1,247 @@
+{
+  "app": "file-explorer",
+  "fixture": "minimal",
+  "locale": "en-US",
+  "timezone": "UTC",
+  "provenance_note": "The isolated gateway served the file-explorer app built into the Kiro Crew checkout (src/kiro_crew/apps/builtins/file_explorer, website/src/apps/file-explorer), because a gateway that still ships the built-in cannot install a second app under the same name. This repository is the externally packaged copy of that app: the same backend and the same page, ported. PORTING.md lists where the two differ; none of the differences is on screen in these pictures.",
+  "data": "fictional: a made-up home folder written by capture/demo_tree.py (see data_notes), plus the app's own saved-state key; Files has no API that writes",
+  "data_notes": [
+    "Files is read-only and has no API that creates a file, so the demo folder could not be seeded through the app's own API. capture/demo_tree.py wrote a made-up home folder (a gardener named Sam and a garden-planner project with one git commit, one edited file and one new file) under the system temp directory, and the gateway ran with HOME pointing at it, so the page opens there and no real user name or path appears.",
+    "The open tabs and expanded folders were set through the page's own saved-state key (kc:file-explorer:state:v2) before each picture.",
+    "Modified times show the capture day: the demo files were written just before the run."
+  ],
+  "init_storage": {
+    "mc-nav": "0",
+    "kc:file-explorer:state:v2": "{\"folderTabs\":[{\"id\":\"ft-garden\",\"rootPath\":\"/tmp/kc-files-demo/home/sam/projects/garden-planner\",\"label\":\"\",\"expanded\":{\"/tmp/kc-files-demo/home/sam/projects/garden-planner\":true,\"/tmp/kc-files-demo/home/sam/projects/garden-planner/notes\":true,\"/tmp/kc-files-demo/home/sam/projects/garden-planner/src\":true}}],\"fileTabs\":[{\"id\":\"of-readme\",\"path\":\"/tmp/kc-files-demo/home/sam/projects/garden-planner/README.md\",\"folderId\":\"ft-garden\"}],\"activeFolderId\":\"ft-garden\",\"activeFileId\":\"of-readme\",\"leftWidth\":300}"
+  },
+  "ready": "text=Garden planner",
+  "forbid_text": [
+    "Backend not reachable",
+    "Cannot open this folder",
+    "This folder is unavailable",
+    "sandbox_unavailable",
+    "kirocrew-harness-"
+  ],
+  "setup": [
+    {
+      "name": "turn the app on",
+      "method": "POST",
+      "path": "/api/apps/file-explorer/enable"
+    },
+    {
+      "name": "retire the host's one-time startup intro",
+      "method": "POST",
+      "path": "/api/feature-videos/feedback",
+      "body": {
+        "id": "crewmates",
+        "status": "dismissed"
+      },
+      "optional": true
+    }
+  ],
+  "setup_when_not_built_in": [
+    {
+      "name": "install this repository",
+      "method": "POST",
+      "path": "/api/apps/install",
+      "body": {
+        "source": "{{app_root}}"
+      }
+    },
+    {
+      "name": "trust it (its backend is its own code)",
+      "method": "POST",
+      "path": "/api/security/trusted-apps/file-explorer"
+    },
+    {
+      "name": "turn the app on",
+      "method": "POST",
+      "path": "/api/apps/file-explorer/enable"
+    }
+  ],
+  "_setup_when_not_built_in_note": "capture.py ignores the key above. Once Kiro Crew no longer ships Files built in, replace the 'turn the app on' step in setup with these three steps, and change every screenshot path from /file-explorer to /apps/file-explorer.",
+  "screenshots": [
+    {
+      "name": "hero",
+      "path": "/file-explorer",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "ready_after": "text=Before the last frost",
+      "alt": "The Files page in Kiro Crew: a garden-planner project folder in the tree on the left, with its notes and src folders open and git marks beside the changed notes, and its README.md on the right rendered as formatted text with a table of garden beds"
+    },
+    {
+      "name": "use-case-tabs",
+      "path": "/file-explorer",
+      "themes": [
+        "light"
+      ],
+      "steps": [
+        {
+          "click": ".mc-fe-tree >> text=data"
+        },
+        {
+          "wait_for": ".mc-fe-tree >> text=plots.csv"
+        },
+        {
+          "click": ".mc-fe-tree >> text=plots.csv"
+        },
+        {
+          "wait_for": ".mc-fe-viewer-filename >> text=plots.csv"
+        },
+        {
+          "click": ".mc-fe-tree >> text=planner.py"
+        },
+        {
+          "wait_for": ".mc-fe-viewer-filename >> text=planner.py"
+        }
+      ],
+      "ready_after": "text=FROST_SAFE_MONTH",
+      "alt": "Three files open as tabs above the viewer (README.md, plots.csv and planner.py), with planner.py shown as syntax-highlighted Python code"
+    },
+    {
+      "name": "use-case-git",
+      "path": "/file-explorer",
+      "themes": [
+        "light"
+      ],
+      "steps": [
+        {
+          "click": ".mc-fe-tree >> text=todo.md"
+        },
+        {
+          "wait_for": ".mc-fe-viewer-filename >> text=todo.md"
+        }
+      ],
+      "ready_after": "text=Net the brassicas",
+      "alt": "The tree marks the edited notes/todo.md with M and the new notes/frost-dates.md with U, the path bar shows the branch main with 2 changes, and todo.md is open showing its new last line"
+    },
+    {
+      "name": "use-case-search",
+      "path": "/file-explorer",
+      "themes": [
+        "light"
+      ],
+      "steps": [
+        {
+          "press": "body",
+          "key": "Control+f"
+        },
+        {
+          "wait_for": "input.mc-fe-search-input"
+        },
+        {
+          "type": "input.mc-fe-search-input",
+          "value": "frost"
+        }
+      ],
+      "ready_after": "text=4 results",
+      "alt": "The search panel over the garden-planner folder with the word frost typed in, listing four matching lines in README.md, notes/frost-dates.md, notes/todo.md and src/planner.py"
+    }
+  ],
+  "walkthrough": {
+    "name": "walkthrough",
+    "theme": "light",
+    "path": "/file-explorer",
+    "ready": "text=Before the last frost",
+    "alt": "A walkthrough of Files: a rendered README in a garden-planner project, opening an edited note that git marks as changed, searching the folder for frost and jumping to the match in planner.py, right-clicking README.md to show its menu (Chat about this file, Open, Copy path, Reveal parent), then opening README.md again",
+    "steps": [
+      {
+        "caption": "Your folders, read-only, inside Kiro Crew"
+      },
+      {
+        "wait_ms": 2200
+      },
+      {
+        "caption": "Git marks show what changed"
+      },
+      {
+        "hover": ".mc-fe-tree >> text=todo.md"
+      },
+      {
+        "wait_ms": 600
+      },
+      {
+        "click": ".mc-fe-tree >> text=todo.md"
+      },
+      {
+        "wait_for": ".mc-fe-viewer-filename >> text=todo.md"
+      },
+      {
+        "wait_ms": 2200
+      },
+      {
+        "caption": "Search the whole folder"
+      },
+      {
+        "press": "body",
+        "key": "Control+f"
+      },
+      {
+        "wait_for": "input.mc-fe-search-input"
+      },
+      {
+        "type": "input.mc-fe-search-input",
+        "value": "frost",
+        "delay_ms": 110
+      },
+      {
+        "wait_for": "text=4 results"
+      },
+      {
+        "wait_ms": 1600
+      },
+      {
+        "click": ".mc-fe-search-row >> text=FROST_SAFE_MONTH"
+      },
+      {
+        "wait_for": ".mc-fe-viewer-filename >> text=planner.py"
+      },
+      {
+        "wait_ms": 2000
+      },
+      {
+        "caption": "Right-click a file for more"
+      },
+      {
+        "right_click": ".mc-fe-tree >> text=README.md"
+      },
+      {
+        "wait_for": "[role=menuitem] >> text=Chat about this"
+      },
+      {
+        "hover": "[role=menuitem] >> text=Chat about this"
+      },
+      {
+        "wait_ms": 2600
+      },
+      {
+        "press": "body",
+        "key": "Escape"
+      },
+      {
+        "wait_ms": 400
+      },
+      {
+        "click": ".mc-fe-tree >> text=README.md"
+      },
+      {
+        "wait_for": ".mc-fe-viewer-filename >> text=README.md"
+      },
+      {
+        "caption": "Read-only: it never edits, moves or deletes"
+      },
+      {
+        "mouse_park": [
+          1300,
+          800
+        ]
+      },
+      {
+        "wait_ms": 3000
+      }
+    ],
+    "tail_ms": 2000
+  }
+}

@@ -4,6 +4,7 @@ import { Search, X, FileText } from 'lucide-react'
 import { Clickable, EmptyState } from '@kirocrew/app-sdk/ui'
 import { fileExplorerApi } from './api'
 import { basename } from './utils'
+import { relativeToRoot } from './lib/platform'
 import { useDebouncedValue } from './hooks'
 import type { SearchResult } from './types'
 
@@ -12,11 +13,6 @@ interface SearchPanelProps {
   rootPath: string
   onClose: () => void
   onJump: (r: SearchResult) => void
-}
-
-function shortenPath(p: string, root: string) {
-  if (root && p.startsWith(root)) return p.slice(root.length).replace(/^\//, '')
-  return p
 }
 
 export default function SearchPanel({ rootPath, onClose, onJump }: SearchPanelProps) {
@@ -79,7 +75,7 @@ export default function SearchPanel({ rootPath, onClose, onJump }: SearchPanelPr
               >
                 <div className="mc-fe-search-file">
                   <FileText size={11} style={{ marginRight: 4, opacity: 0.6 }} />
-                  {shortenPath(r.file, rootPath)}
+                  {relativeToRoot(r.file, rootPath)}
                   <span style={{ color: 'var(--muted)', marginLeft: 6 }}>:{r.line}</span>
                 </div>
                 <div className="mc-fe-search-preview">{r.preview}</div>

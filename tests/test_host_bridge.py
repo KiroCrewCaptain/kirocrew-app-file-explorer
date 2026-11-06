@@ -30,7 +30,8 @@ SERVER = APP_ROOT / "backend" / "server.py"
 ALLOWED_HOST_IMPORTS = {
     "kiro_crew.apps.proxy_auth": {"verify_proxy_request"},
     "kiro_crew.security": {"is_sensitive_path"},
-    "kiro_crew.hooks": {"safe_read_file_bytes"},
+    "kiro_crew.hooks": {"FileTooLargeError", "safe_read_file_bytes", "safe_read_prefix"},
+    "kiro_crew.github_runner": {"validate_provider_executable"},
     "kiro_crew.sandbox": {
         "SandboxUnavailableError",
         "cgroup_scope_argv",
@@ -100,6 +101,13 @@ _BLOCKED = textwrap.dedent(
     server.ALLOWED_ROOTS = [tmp.resolve()]
     out["sensitive"] = server._is_sensitive(tmp / "a.txt")
     out["read"] = server.safe_read_file_bytes(str(tmp / "a.txt"))
+    out["read_prefix"] = server.safe_read_prefix(str(tmp / "a.txt"), 8192)
+    try:
+        server.validate_provider_executable("/usr/bin/rg")
+        out["provenance"] = "accepted"
+    except ValueError:
+        out["provenance"] = "refused"
+    out["rg"] = server._rg_executable()
     out["verified"] = server.verify_proxy_request("1:abc", method="GET", target="/read", body=b"")
     try:
         server.wrap_argv(["git", "status"])
@@ -148,7 +156,16 @@ class TestWithoutTheHost(unittest.TestCase):
 
     def test_every_missing_seam_is_named(self) -> None:
         self.assertEqual(
-            self.out["gaps"], ["proxy_auth", "sensitive_path", "safe_read", "sandbox", "audit_log"]
+            self.out["gaps"],
+            [
+                "proxy_auth",
+                "sensitive_path",
+                "safe_read",
+                "safe_read_prefix",
+                "sandbox",
+                "executable_provenance",
+                "audit_log",
+            ],
         )
         self.assertEqual(self.out["health_gaps"], self.out["gaps"])
         self.assertIn("platform_boot", self.out["gaps_after_boot"])
@@ -156,8 +173,13 @@ class TestWithoutTheHost(unittest.TestCase):
     def test_every_path_is_sensitive_and_every_read_refused(self) -> None:
         self.assertIs(self.out["sensitive"], True)
         self.assertIsNone(self.out["read"])
+        self.assertIsNone(self.out["read_prefix"])
         self.assertEqual(self.out["safe_path"], 403)
         self.assertEqual(self.out["read_route"], 403)
+
+    def test_no_rg_is_run_without_the_provenance_check(self) -> None:
+        self.assertEqual(self.out["provenance"], "refused")
+        self.assertIsNone(self.out["rg"])
 
     def test_no_signature_verifies(self) -> None:
         self.assertIs(self.out["verified"], False)
@@ -177,7 +199,14 @@ _FAKE_HOST = {
         "def verify_proxy_request(header, **kw):\n    return header == 'ok'\n"
     ),
     "kiro_crew/security.py": "def is_sensitive_path(p):\n    return p.endswith('secret')\n",
-    "kiro_crew/hooks.py": "def safe_read_file_bytes(raw):\n    return b'host-read'\n",
+    "kiro_crew/hooks.py": (
+        "class FileTooLargeError(Exception):\n    pass\n"
+        "def safe_read_file_bytes(raw):\n    return b'host-read'\n"
+        "def safe_read_prefix(raw, n):\n    return b'host-read'[:n]\n"
+    ),
+    "kiro_crew/github_runner.py": (
+        "def validate_provider_executable(candidate, **kw):\n    return candidate\n"
+    ),
     "kiro_crew/sandbox.py": (
         "class SandboxUnavailableError(RuntimeError):\n    pass\n"
         "def wrap_argv(argv, mode='auto', **kw):\n    return ['wrapped', *argv], None\n"
@@ -201,6 +230,7 @@ _PRESENT = textwrap.dedent(
     sys.path.insert(0, ".")
     from backend import server
     import kiro_crew.security, kiro_crew.hooks, kiro_crew.sandbox, kiro_crew.sel
+    import kiro_crew.github_runner
     import kiro_crew.apps.proxy_auth
     import kiro_crew.platform
     server._boot_host_platform()
@@ -208,6 +238,12 @@ _PRESENT = textwrap.dedent(
         "gaps": server.HOST_GAPS,
         "fence": server.is_sensitive_path is kiro_crew.security.is_sensitive_path,
         "read": server.safe_read_file_bytes is kiro_crew.hooks.safe_read_file_bytes,
+        "read_prefix": server.safe_read_prefix is kiro_crew.hooks.safe_read_prefix,
+        "too_large": server.FileTooLargeError is kiro_crew.hooks.FileTooLargeError,
+        "provenance": (
+            server.validate_provider_executable
+            is kiro_crew.github_runner.validate_provider_executable
+        ),
         "wrap": server.wrap_argv is kiro_crew.sandbox.wrap_argv,
         "error": server.SandboxUnavailableError is kiro_crew.sandbox.SandboxUnavailableError,
         "verify": server.verify_proxy_request is kiro_crew.apps.proxy_auth.verify_proxy_request,

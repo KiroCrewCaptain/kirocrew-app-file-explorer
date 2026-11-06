@@ -8,7 +8,9 @@ installed.
 """
 
 import os
+import tempfile
 from pathlib import Path
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -16,6 +18,30 @@ import pytest
 from backend import server
 
 SandboxUnavailableError = server.SandboxUnavailableError
+
+#: The stand-in for the host's whole-file read cap (``kiro_crew.hooks.MAX_FILE_BYTES``,
+#: 50 MB there). Small, so a test can write a file past it cheaply; what is under
+#: test is how this backend behaves when the host's read refuses a file as too
+#: large, not the size of the host's cap.
+STAND_IN_READ_CAP = 64 * 1024
+
+
+def _can_create_symlink() -> bool:
+    """Whether this host lets the test process create a directory symlink."""
+    with tempfile.TemporaryDirectory() as tmp:
+        target = os.path.join(tmp, "target")
+        os.mkdir(target)
+        try:
+            os.symlink(target, os.path.join(tmp, "link"))
+        except (OSError, NotImplementedError, AttributeError):
+            return False
+        return True
+
+
+requires_symlinks = pytest.mark.skipif(
+    not _can_create_symlink(),
+    reason="creating a symlink needs SeCreateSymbolicLinkPrivilege on Windows",
+)
 
 
 @pytest.fixture
@@ -49,18 +75,34 @@ def patch_allowed_roots(tmp_tree):
 
     def mock_safe_read(raw):
         """The host's safe read, minus its link and descriptor checks: refuses a
-        sensitive path, returns None for an unreadable one."""
+        sensitive path, returns None for an unreadable one, and raises the
+        host's too-large error past the whole-file cap."""
         if mock_is_sensitive(raw):
             return None
         try:
+            if Path(raw).stat().st_size > STAND_IN_READ_CAP:
+                raise server.FileTooLargeError(raw)
             return Path(raw).read_bytes()
+        except OSError:
+            return None
+
+    def mock_safe_read_prefix(raw, n):
+        """The host's prefix read: at most ``n`` bytes, whatever the file's size."""
+        if mock_is_sensitive(raw):
+            return None
+        try:
+            with open(raw, "rb") as fh:
+                return fh.read(n)
         except OSError:
             return None
 
     with patch.object(server, "ALLOWED_ROOTS", [tmp_tree]):
         with patch.object(server, "_HOME", tmp_tree):
             with patch.object(server, "is_sensitive_path", mock_is_sensitive):
-                with patch.object(server, "safe_read_file_bytes", mock_safe_read):
+                with (
+                    patch.object(server, "safe_read_file_bytes", mock_safe_read),
+                    patch.object(server, "safe_read_prefix", mock_safe_read_prefix),
+                ):
                     with patch.object(server, "sel", MagicMock()):
                         with patch.object(server, "wrap_argv", mock_wrap_argv):
                             with patch.object(server, "cgroup_scope_argv", lambda argv: argv):
@@ -131,6 +173,105 @@ class TestIsSensitive:
         # The fix must not over-block: a genuine safe subdir stays accessible.
         assert server._is_sensitive(tmp_tree / ".kiro" / "crew" / "workspace" / "a.txt") is False
 
+    # A synthetic absolute base whose own parts contain no crew-home marker, so
+    # the crew-home policy keys on the ``.kiro/crew`` (or ``.kirocrew``) segment
+    # written into each case rather than on an incidental marker in the prefix.
+    # (``tmp_path`` can itself live under the real data home, which would make the
+    # FIRST marker match win on the prefix -- the same reason the crew-home cases
+    # above build from it only when the prefix is marker-free.)
+    _CREW_BASE = Path("/synthetic-home")
+
+    @pytest.mark.parametrize(
+        "relpath",
+        (
+            ".kiro/crew/members/atlas/drafts/note.md",
+            ".kiro/crew/members/atlas/briefing.md",
+            ".kiro/crew/members/atlas/activity.jsonl",
+            ".kiro/crew/members/atlas/welcome_owed.json",
+            ".kirocrew/members/atlas/drafts/note.md",
+        ),
+    )
+    def test_member_space_files_are_accessible(self, relpath):
+        """A crewmate's own non-secret working files open in the file explorer.
+
+        The chat file preview already opens these (its gate is the sensitive-path
+        list, which names nothing under ``members/``); before ``members`` was in
+        ``_KIROCREW_SAFE_SUBDIRS`` the explorer refused the same file as a
+        sensitive path. These are the only kinds of file a member space holds: an
+        activity log, a first-welcome marker, the self-briefing, and agent-written
+        notes/drafts -- no credential, token, session or database.
+        """
+        assert server._is_sensitive(self._CREW_BASE / relpath) is False, relpath
+
+    @pytest.mark.parametrize(
+        "relpath",
+        (
+            # Per-crewmate rules, goals and DM bindings -- a SIBLING of members/.
+            "member-records/atlas/rules.json",
+            "member-records/atlas/goals.json",
+            # Retained V1 member-memory bindings (hold a raw session key).
+            "member-memory-bindings/sessions/abc/binding.json",
+            # Managed memory stores.
+            "memory_stores/atlas/memory.db",
+            # The data-home root and an unlisted leaf stay refused as before.
+            "config.json",
+            "sessions.db",
+        ),
+    )
+    def test_secret_siblings_of_members_stay_refused(self, relpath):
+        """Admitting ``members`` must not reach the secret-holding leaves beside it.
+
+        The member secrets live in SIBLING directories of ``members/`` under the
+        data home, each a name the deny-by-default crew-home policy never lists in
+        ``_KIROCREW_SAFE_SUBDIRS`` (and the shared sensitive-path list denies them
+        by name too). They are children of the data home, not of ``members/``, so
+        the new allow-list entry does not reach them.
+        """
+        assert server._is_sensitive(self._CREW_BASE / ".kiro" / "crew" / relpath) is True, relpath
+        assert server._is_sensitive(self._CREW_BASE / ".kirocrew" / relpath) is True, relpath
+
+    def test_members_allowlist_does_not_fold_case(self):
+        """``members`` is on the allow-list, which is deliberately case-SENSITIVE.
+
+        Same direction-of-failure reasoning as the other safe subdirs: on a
+        case-sensitive volume ``crew/Members`` is a different directory from the
+        safe ``crew/members``, so the capitalised spelling stays refused.
+        """
+        assert server._is_safe_crew_subdir("members") is True
+        assert server._is_safe_crew_subdir("Members") is False
+        assert (
+            server._is_sensitive(self._CREW_BASE / ".kiro" / "crew" / "Members" / "atlas" / "x.md")
+            is True
+        )
+
+    def test_member_path_traversal_and_escape_still_refused(self):
+        """A path that climbs out of members/ or whose root is NOT the crew home
+        gets no pass from the new allow-list entry.
+
+        ``_is_sensitive`` walks resolved path parts, so a ``..`` that lands on a
+        secret sibling resolves to that sibling and is refused; a ``members``
+        directory outside the crew home is not matched by the crew-home policy at
+        all (and _safe_path's ALLOWED_ROOTS + resolve() is the traversal boundary).
+        """
+        # ../ out of a member space onto the fenced member-records sibling.
+        escaped = (
+            self._CREW_BASE
+            / ".kiro"
+            / "crew"
+            / "members"
+            / "atlas"
+            / ".."
+            / ".."
+            / "member-records"
+            / "x.json"
+        )
+        # os.path.normpath-style collapse without touching the filesystem.
+        collapsed = Path(os.path.normpath(escaped))
+        assert server._is_sensitive(collapsed) is True
+        # A 'members' directory that is NOT under the crew home is not blessed by
+        # the crew-home allow-list (it is just an ordinary directory here).
+        assert server._is_sensitive(self._CREW_BASE / "members" / "atlas" / "note.md") is False
+
     @pytest.mark.parametrize(
         "relpath",
         (
@@ -199,6 +340,77 @@ class TestIsSensitive:
 
     def test_subdir_not_sensitive(self, tmp_tree):
         assert server._is_sensitive(tmp_tree / "subdir" / "nested.md") is False
+
+
+class TestMemberSpaceReadGateResolvesLinksAndTraversal:
+    """The REAL read gate (`_safe_path`, which resolve()s before `_is_sensitive`)
+    refuses a `..` climb or a symlink that lands on a fenced member sibling.
+
+    Admitting ``members`` to the explorer's allow-list opens member working
+    files; it must not become a hop to the secret-holding siblings beside them
+    (``member-records/``, ``config.json``, ``sessions.db``). These assertions go
+    through ``_safe_path`` -- the entry the HTTP read/list handlers use -- so the
+    resolve() that collapses ``..`` and follows symlinks is the real one, not a
+    lexical normpath in the test. They lock in refusal that already holds on main,
+    so they are NOT red without the ``members`` change.
+
+    The crew home is built under the autouse fixture's allowed root (``tmp_tree``)
+    as ``.kirocrew/`` so the layout does not depend on where ``tmp_path`` lives,
+    and ``ALLOWED_ROOTS``/``_HOME`` are already pointed at it by that fixture's
+    monkeypatch (no bare ``monkeypatch.undo``).
+    """
+
+    @pytest.fixture
+    def crew_layout(self, tmp_tree):
+        """A real on-disk crew home: members/atlas/ beside a fenced member-records/."""
+        crew = tmp_tree / ".kirocrew"
+        member = crew / "members" / "atlas"
+        member.mkdir(parents=True)
+        (member / "note.md").write_text("a draft\n")
+        records = crew / "member-records"
+        records.mkdir(parents=True)
+        (records / "x.json").write_text("{}")
+        (crew / "config.json").write_text("{}")
+        (crew / "sessions.db").write_bytes(b"\x00")
+        return crew
+
+    def test_member_file_opens_through_the_real_gate(self, crew_layout):
+        # Baseline: the member working file itself opens via _safe_path (what the
+        # ``members`` allow-list entry is for), so the refusals below are the gate
+        # drawing a boundary, not refusing everything. Built under the allowed
+        # root exactly as ``TestKirocrewGranularSensitive`` builds its safe-subdir
+        # assertions (``tmp_tree / ".kirocrew"``), so no skip is needed.
+        note = crew_layout / "members" / "atlas" / "note.md"
+        p = server._safe_path(str(note))
+        assert p == note
+
+    def test_dotdot_climb_onto_member_records_is_refused(self, crew_layout):
+        # resolve() inside _safe_path collapses the ``..`` to the fenced sibling.
+        traversed = crew_layout / "members" / "atlas" / ".." / ".." / "member-records" / "x.json"
+        with pytest.raises(server.PathError) as exc:
+            server._safe_path(str(traversed))
+        assert exc.value.status == 403
+
+    @requires_symlinks
+    def test_symlink_out_of_member_space_to_records_dir_is_refused(self, crew_layout):
+        # members/atlas/link -> <crew>/member-records ; reading link/x.json must
+        # resolve to the fenced sibling and be refused.
+        link = crew_layout / "members" / "atlas" / "link"
+        os.symlink(crew_layout / "member-records", link, target_is_directory=True)
+        with pytest.raises(server.PathError) as exc:
+            server._safe_path(str(link / "x.json"))
+        assert exc.value.status == 403
+
+    @requires_symlinks
+    @pytest.mark.parametrize("secret", ("config.json", "sessions.db"))
+    def test_file_symlink_to_crew_home_secret_is_refused(self, crew_layout, secret):
+        # members/atlas/<secret>-link -> <crew>/<secret> ; following it must land
+        # on the deny-by-default crew-home leaf and be refused.
+        link = crew_layout / "members" / "atlas" / f"{secret}-link"
+        os.symlink(crew_layout / secret, link)
+        with pytest.raises(server.PathError) as exc:
+            server._safe_path(str(link))
+        assert exc.value.status == 403
 
 
 class TestListDir:
@@ -388,6 +600,66 @@ class TestSearch:
         results = server._search(tmp_tree, "", "", "")
         assert results == []
 
+    def test_search_never_runs_an_rg_planted_in_the_agent_checkout(self, tmp_tree, monkeypatch):
+        """The first ``rg`` on ``$PATH`` lives in a tree the agent writes: it must
+        not run, and the python engine answers instead."""
+        planted_dir = tmp_tree / "checkout" / "bin"
+        planted_dir.mkdir(parents=True)
+        planted = planted_dir / ("rg.exe" if os.name == "nt" else "rg")
+        planted.write_text("#!/bin/sh\nexit 0\n")
+        planted.chmod(0o755)
+        monkeypatch.setenv("PATH", str(planted_dir))
+        monkeypatch.setenv("KIROCREW_PROJECT_DIR", str(tmp_tree / "checkout"))
+        spawned: list = []
+
+        def fake_run(argv, **kwargs):
+            spawned.append(list(argv))
+            return MagicMock(stdout="", returncode=1)
+
+        monkeypatch.setattr(server, "run_limited", fake_run)
+        checked: list = []
+
+        def host_provenance_check(candidate, **_kwargs):
+            # The host's rule this case leans on: a binary inside the agent's
+            # checkout (KIROCREW_PROJECT_DIR) is refused.
+            checked.append(candidate)
+            if Path(candidate).resolve().is_relative_to(
+                Path(os.environ["KIROCREW_PROJECT_DIR"]).resolve()
+            ):
+                raise ValueError("inside the agent checkout")
+            return candidate
+
+        monkeypatch.setattr(server, "validate_provider_executable", host_provenance_check)
+
+        results = server._search(tmp_tree, "hello", "", "")
+
+        assert [Path(c).resolve() for c in checked] == [planted.resolve()]
+        assert spawned == []
+        assert [Path(r["file"]).name for r in results] == ["file.txt"]
+
+    def test_search_rg_passes_the_query_on_stdin_not_argv(self, tmp_tree, monkeypatch):
+        """Another account can read a child's argv, so the typed query rides on
+        stdin; ``--file`` reads it line by line, so a multi-line query spawns nothing."""
+        calls: list = []
+
+        def fake_run(argv, **kwargs):
+            calls.append((list(argv), kwargs))
+            return MagicMock(stdout="", returncode=1)
+
+        monkeypatch.setattr(server, "cgroup_scope_argv", lambda argv: argv)
+        monkeypatch.setattr(server, "run_limited", fake_run)
+        monkeypatch.setattr(server, "_rg_executable", lambda: "/usr/bin/rg")
+
+        server._search(tmp_tree, "s3cret-needle", "", "")
+        server._search(tmp_tree, "two\nlines", "", "")
+
+        assert len(calls) == 1
+        argv, kwargs = calls[0]
+        assert argv[0] == "/usr/bin/rg"
+        assert not [a for a in argv if "s3cret-needle" in a]
+        assert argv[-4:] == ["--file", "-", "--", str(tmp_tree)]
+        assert kwargs["input"] == "s3cret-needle\n"
+
     def test_search_falls_back_to_python_when_sandbox_unavailable(self, tmp_tree):
         """Same host condition as the git-status 503: the rg spawn cannot be
         sandboxed, so _search must degrade to the python engine -- the same
@@ -471,7 +743,7 @@ class TestSearchTccPruning:
             patch.object(server, "cgroup_scope_argv", lambda argv: argv),
             patch.object(server, "run_limited", fake_run),
         ):
-            server._search_rg(root, "needle", "", "")
+            server._search_rg(root, "needle", "", "", "rg")
         return captured["cmd"]
 
     def test_rg_excludes_gated_dirs_at_home(self, tmp_tree):
@@ -609,6 +881,58 @@ class TestHTTPHandler:
         assert responses[0][0] == 200
         assert len(responses[0][1]["results"]) == 1
 
+    def test_search_reports_python_engine_when_rg_on_path_is_refused(self, tmp_tree):
+        """An ``rg`` on ``$PATH`` that fails the provenance check is not run, so
+        the reply must say "python" (the UI's slow-path notice keys off it)."""
+        real_which = server.shutil.which
+
+        def refuse(path):
+            raise ValueError("not a vetted install")
+
+        with (
+            patch.object(
+                server.shutil,
+                "which",
+                lambda name, *a, **k: "/planted/rg" if name == "rg" else real_which(name, *a, **k),
+            ),
+            patch.object(server, "validate_provider_executable", refuse),
+        ):
+            for q in ("hello", ""):
+                responses = self._make_request(f"/search?path={tmp_tree}&q={q}")
+                code, body = responses[0]
+                assert code == 200
+                assert body["engine"] == "python", body
+            health = self._make_request("/health")
+        assert health[0][1]["rg"] is False
+
+    def _search_capped(self, root, files):
+        """Search ``root`` for "needle" with the result cap patched to 2."""
+        root.mkdir()
+        for name in files:
+            (root / name).write_text("needle here\n")
+        with (
+            patch.object(server, "_rg_executable", lambda: None),
+            patch.object(server, "MAX_SEARCH_RESULTS", 2),
+        ):
+            return self._make_request(f"/search?path={root}&q=needle")
+
+    def test_search_not_truncated_when_matches_exactly_fill_cap(self, tmp_tree):
+        """Exactly MAX_SEARCH_RESULTS matches means nothing was cut off, so the
+        reply must not say ``truncated`` (the UI turns that into "capped")."""
+        responses = self._search_capped(tmp_tree / "exact", ["a.txt", "b.txt"])
+        code, body = responses[0]
+        assert code == 200
+        assert len(body["results"]) == 2
+        assert body["truncated"] is False, body
+
+    def test_search_truncated_and_trimmed_when_matches_exceed_cap(self, tmp_tree):
+        """One match past the cap: the reply is cut to the cap and says so."""
+        responses = self._search_capped(tmp_tree / "over", ["a.txt", "b.txt", "c.txt"])
+        code, body = responses[0]
+        assert code == 200
+        assert len(body["results"]) == 2
+        assert body["truncated"] is True, body
+
     def test_complete_endpoint(self, tmp_tree):
         responses = self._make_request(f"/complete?path={tmp_tree}/")
         assert responses[0][0] == 200
@@ -729,6 +1053,42 @@ class TestHTTPHandler:
         assert responses[0][0] == 200
         assert responses[0][1]["binary"] is True
         assert responses[0][1]["content"] == ""
+
+    def test_read_text_file_over_safe_read_cap_returns_truncated_prefix(self, tmp_tree):
+        """A text file larger than the host's whole-file read cap (50 MB) must
+        come back as its first max_bytes bytes with truncated=True, not a 500."""
+        line = b"2026-11-03 INFO an ordinary log line\n"
+        big = tmp_tree / "huge.log"
+        big.write_bytes(line * (STAND_IN_READ_CAP // len(line) + 10))
+        # Go through do_GET so an escaping exception surfaces as the route's
+        # real reply (its catch-all answers 500) rather than a test error.
+        handler: Any = server.FileExplorerHandler.__new__(server.FileExplorerHandler)
+        handler.path = f"/read?path={big}&max_bytes=1024"
+        handler.headers = {}
+        responses: list = []
+        handler._json = lambda code, payload: responses.append((code, payload))
+        with patch.object(server, "verify_proxy_request", lambda *a, **k: True):
+            handler.do_GET()
+        assert len(responses) == 1
+        code, body = responses[0]
+        assert code == 200, (code, body)
+        assert body["binary"] is False
+        assert body["truncated"] is True
+        assert body["content"] == (line * (1024 // len(line) + 1))[:1024].decode()
+
+    def test_search_python_skips_file_over_safe_read_cap(self, tmp_tree):
+        """The python search engine skips a file over the host's read cap and
+        still returns matches from the other files."""
+        FileTooLargeError = server.FileTooLargeError
+        line = b"hello from a huge log\n"
+        (tmp_tree / "huge.log").write_bytes(line * (STAND_IN_READ_CAP // len(line) + 10))
+        found: object
+        try:
+            results = server._search_python(tmp_tree, "hello", "", "")
+            found = [Path(r["file"]).name for r in results]
+        except FileTooLargeError as exc:  # the escaping error is the wrong value under test
+            found = exc
+        assert found == ["file.txt"]
 
 
 class TestKirocrewGranularSensitive:
@@ -940,7 +1300,7 @@ class TestAutoSdeRound1Findings:
 
         with patch.object(server, "wrap_argv", side_effect=fake_wrap):
             try:
-                server._search_rg(tmp_tree, "needle", "", "")
+                server._search_rg(tmp_tree, "needle", "", "", "rg")
             except Exception:
                 pass
         cmd = captured.get("cmd")
@@ -973,7 +1333,7 @@ class TestAutoSdeRound1Findings:
 
         with patch.object(server, "wrap_argv", side_effect=fake_wrap):
             try:
-                server._search_rg(tmp_tree / ".kirocrew" / "workspace", "needle", "", "")
+                server._search_rg(tmp_tree / ".kirocrew" / "workspace", "needle", "", "", "rg")
             except Exception:
                 pass
         cmd = captured.get("cmd")

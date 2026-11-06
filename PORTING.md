@@ -17,12 +17,15 @@ a change here.
 
 ## What carried over unchanged
 
-- `app.json` `name` (`file-explorer`), `version` (`1.0.0`), `permissions`
+- `app.json` `name` (`file-explorer`), `permissions`
   (`api: ["/apps/file-explorer/api"]`), `platform`, `defaultEnabled` (`false`),
   every display field, `useCases` and `configuration`.
   `tests/test_manifest_contract.py` compares them with the built-in's manifest
   (`tests/fixtures/builtin-app.json`), because adoption refuses a manifest that
-  would widen a grant or force the app off.
+  would widen a grant or force the app off. The `version` started equal to the
+  built-in's (`1.0.0`) and only moves up: adoption matches it against Kiro
+  Crew's pin of one commit here, and a later commit's patch bump is what shows
+  an adopted user the update. See [Fixes since the port](#fixes-since-the-port).
 - The backend's process model: a stdlib `ThreadingHTTPServer` the gateway spawns
   and reverse-proxies at `/apps/file-explorer/api/*`, with `port: "auto"` and
   `healthCheck: "/health"`. Every route, its query parameters, validation and
@@ -40,8 +43,8 @@ a change here.
 |---|---|---|
 | `"backend": {"entryPoint": "kiro_crew.apps.builtins.file_explorer.server"}` (`app.json:45`) | `"entryPoint": "backend/server.py"` | A module-style entry resolves only inside the Kiro Crew package (`apps/manifest.py` `is_module_style_entry_point`, `apps/backend.py:450-459` `shipped_builtin_module_path`). A file entry inside the app's own tree is the external form. |
 | A spawned backend | Still a spawned backend, **not** `backend.hooks` | Deliberate. The launcher wraps every app backend in the OS sandbox and the cgroup ceiling at spawn (`apps/backend.py:1228`, `:1254`), so a file browser that runs as its own process keeps the credential-home masks under it. In-gateway hooks would run the same reads inside the gateway process with no OS fence at all. It also keeps the proxy path, and therefore `permissions.api`, identical to the built-in's, so adoption is not a grant change. The App Kit level-1 seams (`ctx.require_owner`, `ctx.embed`, `ctx.sdk_level`) are hook-context members and have no consumer in a spawned backend; the app is read-only, so it has no write to gate. |
-| `from kiro_crew... import ...` at module top (`server.py:49-61`) | One feature-detected host bridge (`backend/server.py:54-217`) | See [Host bridge](#host-bridge-private-kiro-crew-imports). |
-| `platform_compat.IS_POSIX`, `strip_extended_length_prefix`, `tcc_protected_dirs_for_walk` (`server.py:49`) | `_Platform` (`backend/server.py:181-217`) | Three small pure helpers, re-stated with the same behaviour rather than imported. |
+| `from kiro_crew... import ...` at module top (`server.py:49-61`) | One feature-detected host bridge (`backend/server.py:54-243`) | See [Host bridge](#host-bridge-private-kiro-crew-imports). |
+| `platform_compat.IS_POSIX`, `strip_extended_length_prefix`, `tcc_protected_dirs_for_walk` (`server.py:49`) | `_Platform` (`backend/server.py:207-243`) | Three small pure helpers, re-stated with the same behaviour rather than imported. |
 | `boot_platform(KiroCrewConfig.load())` in `main()` (`server.py:1387-1393`) | `_boot_host_platform()` | Same call when the host has it; skipped (and reported) when it does not, which can only happen on a host that has no sandbox wrapper this backend could use either. |
 | `sel().log_api_access(..., source="builtin-app")` (`server.py:485-491`) | `source="app"` | This copy is an installed app; it says so, using the source the host's own app audit SDK writes (`apps/audit_sdk.py:99`). |
 | `/health` | Adds `hostGaps: []` | Names any host capability this process could not import, so an operator can see why something is refused. |
@@ -65,17 +68,20 @@ behaviour both with no `kiro_crew` at all and with a stand-in one.
 |---|---|---|
 | `kiro_crew.apps.proxy_auth.verify_proxy_request` | The gateway's signature on every proxied request (CWE-306) | Every route but `/health` answers 401. (This one IS public: App Kit `api-reference.md`, "Proxy Authentication".) |
 | `kiro_crew.security.is_sensitive_path` | The shared credential fence, on every resolved path | Every path is treated as sensitive: 403 |
-| `kiro_crew.hooks.safe_read_file_bytes` | The link-safe, descriptor-checked read behind `/read` and search | Every read is refused: 403 |
+| `kiro_crew.hooks.safe_read_file_bytes` | The link-safe, descriptor-checked read behind image previews and the in-process search | Every read is refused: 403 |
+| `kiro_crew.hooks.{safe_read_prefix, FileTooLargeError}` | The same read, stopped after N bytes: the binary sniff and the text preview, so a file past the host's 50 MB whole-file cap still previews; and the error that cap raises, which the in-process search skips | Every text read is refused: 403 (`safe_read_prefix`) |
+| `kiro_crew.github_runner.validate_provider_executable` | The provenance check the host's own file search runs on the `rg` it finds on `$PATH`, which can reach a tree the agent writes | No `rg` is run: search uses the in-process engine (`executable_provenance`) |
 | `kiro_crew.sandbox.{wrap_argv, cgroup_scope_argv, run_limited, SandboxUnavailableError}` | Sandbox and cgroup wrapping for the `git` and `rg` children | `git` is never run: `/git-status` answers the built-in's typed 503 `sandbox_unavailable`; search uses the in-process engine |
 | `kiro_crew.sel.sel` | The security event log | The audit line goes to this process's own log |
 | `kiro_crew.platform.boot_platform`, `kiro_crew.config.loader.KiroCrewConfig` | The platform context the sandbox wrapper reads | Skipped and reported (`platform_boot`) |
 
 ## Remaining gaps
 
-1. **A public backend seam for spawned app processes.** The five private imports
-   above (`backend/server.py:109-160`, `:163-178`) are a Kiro Crew change away
+1. **A public backend seam for spawned app processes.** The private imports
+   above (`backend/server.py:103-186`, `:189-204`) are a Kiro Crew change away
    from being a published module, for example `kiro_crew.apps.sdk.backend` with
-   `is_sensitive_path`, `safe_read`, `sandboxed_run` and `audit`. Until then a
+   `is_sensitive_path`, `safe_read`, `safe_read_prefix`, `vetted_executable`,
+   `sandboxed_run` and `audit`. Until then a
    release that moves one of them makes this app refuse that capability (closed,
    reported in `/health`), not break open. Kiro Crew's `dashboard/handlers/files.py:867-882`
    comment and `security/paths_lists.py:1226` name this app as a reader; they need
@@ -191,6 +197,23 @@ file).
 | `website/src/test/FileExplorerTabStripRenameFocus.test.tsx`, `fileExplorerTreeScroll.test.ts` | `ui/tests/tabStripRenameFocus.test.tsx`, `ui/tests/treeScroll.test.ts` | Import paths only. |
 | File-explorer cases of `windowsBasenameSites.test.tsx`, `explorerNotebookNarrow.test.ts`, `ImeEnterGuardSites.test.tsx` | `ui/tests/sites.test.tsx` | The IME case drives a guard that declines the key instead of the host's composition latch. |
 | (none) | `ui/tests/i18n.test.ts`, `ui/tests/lib.test.tsx` | Catalog coverage and plurals; the local menu, deep-link reader and path helpers. |
+
+## Fixes since the port
+
+Each fix that landed on the built-in after the port, carried here so a user on
+this copy has it too. Kiro Crew `main` commits; the issue in brackets.
+
+| Kiro Crew commit | What a user sees | Here |
+|---|---|---|
+| `39dfa400c6` (#27441) | A crewmate's own working files under the data folder's `members/` open, as they already did in the chat preview; the secret-holding siblings stay refused | `members` in `_KIROCREW_SAFE_SUBDIRS` |
+| `c156fd72f4` (#27791) | On a Windows gateway, **Go to parent folder**, **Reveal parent** and open-by-path go to the real parent folder instead of `/` | `ui/src/utils.ts` `dirname` |
+| `2b43356388` (#27823) | On a Windows gateway, a search hit is labelled relative to the searched folder, with no stray `\` and whatever the root's separator or case | `relativeToRoot` in `ui/src/lib/platform.ts` |
+| `ee4efcede7` (#29853) | A text file over 50 MB previews its first 4 MB as **truncated** instead of failing; the in-process search skips it instead of failing | `safe_read_prefix` in the bridge |
+| `73b24cac7b` (#18969) | **Ctrl+Shift+T** / **Cmd+Shift+T** is left to the dashboard's reopen-closed-chat command instead of also opening a folder tab | the shortcut handler in `ui/src/FileExplorerPage.tsx` |
+| `3adab5e0c4` (#30503) | A folder with exactly 500 matches no longer says **(capped)** | `/search` keeps one result past the cap |
+| `600ae6b0cf` (#10852) | Search never runs an `rg` that fails the host's provenance check, the query goes to `rg` on stdin instead of its command line, and a query with a line break returns nothing | `validate_provider_executable` in the bridge |
+
+The tests each fix added are under `tests/` and `ui/tests/`.
 
 ## Verified against a real gateway
 

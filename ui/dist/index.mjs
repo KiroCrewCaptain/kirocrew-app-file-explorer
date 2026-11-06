@@ -399,6 +399,23 @@ function pathBasename(p) {
 function stripTrailingSeparators(p) {
 	return p.replace(backslashIsSeparator(p) ? /[\\/]+$/ : /\/+$/, "");
 }
+/** `p` as a label relative to `root`, for DISPLAY only: `C:\proj\src\a.py`
+*  under `C:\proj` → `src\a.py`. A Windows-shaped `p` matches `root` with
+*  either separator and without case, since the backend prints native paths
+*  while a root may carry another spelling; a POSIX path matches byte for
+*  byte. `p` comes back whole when it is not under `root`, and `''` when it
+*  IS `root`. */
+function relativeToRoot(p, root) {
+	if (!root) return p;
+	const r = stripTrailingSeparators(root);
+	const win = backslashIsSeparator(p);
+	const fold = (x) => win ? x.replace(/\\/g, "/").toLowerCase() : x;
+	if (p.length < r.length || fold(p.slice(0, r.length)) !== fold(r)) return p;
+	const rest = p.slice(r.length);
+	const sep = win ? /^[\\/]+/ : /^\/+/;
+	if (rest !== "" && r !== "" && !sep.test(rest)) return p;
+	return rest.replace(sep, "");
+}
 /**
 * The platform command modifier is held: Cmd on macOS, Ctrl elsewhere. Exactly
 * one of the two, because Cmd+Ctrl is a chord macOS reserves for itself.
@@ -529,6 +546,72 @@ function fmtDateTimeNumeric(value) {
 		second: "2-digit"
 	}).format(value);
 }
+// src/deepLink.ts
+/**
+* The Files page's deep link: `<page route>?path=<absolute path>`.
+*
+* Another dashboard surface (the chat side panel's file viewer) hands a file to
+* this page through that URL. `FileExplorerPage` reads the param once, resolves
+* it through the app's own backend, and opens it in the tab whose root already
+* contains it, or in a new tab rooted at its folder. The page never trusts the
+* raw value: the backend's `resolve` says whether the path exists, what it is,
+* and whether this app may show it at all.
+*
+* Only the reading half lives here. The link BUILDER belongs to whoever links
+* in (Kiro Crew's own file viewer); see PORTING.md.
+*
+* Pure on purpose: the containment rule and the reveal chain are pinned by
+* `ui/tests/deepLink.test.ts` rather than by driving the page.
+*/
+/** Query param naming the path to open. */
+var FILE_EXPLORER_PATH_PARAM = "path";
+/**
+* A path in the form the page compares by. Windows drive (`C:\x`) and UNC
+* (`\\host\share`) paths compare with either separator and case-insensitively;
+* everything else compares byte for byte, since a POSIX path IS case-sensitive.
+*/
+var normPath = (x) => /^([a-z]:|[\\/]{2})/i.test(x) ? x.replace(/\\/g, "/").toLowerCase() : x;
+/** `p` is the root `r` itself or a path below it. */
+var underRoot = (p, r) => {
+	const [a, b] = [normPath(p), normPath(r).replace(/\/+$/, "")];
+	return a === b || a.startsWith(b + "/") || b === "";
+};
+/**
+* The directory containing `p`, or `null` at a filesystem root. Separator-aware
+* because the backend prints paths with the host's own separator (`str(Path)`),
+* so on a Windows gateway every one is a backslash. `utils.dirname` delegates
+* here for Windows-shaped paths and keeps a `/`-only cut for POSIX ones.
+*/
+function parentDir(p) {
+	const trimmed = p.replace(/[\\/]+$/, "");
+	const cut = Math.max(trimmed.lastIndexOf("/"), trimmed.lastIndexOf("\\"));
+	if (cut < 0) return null;
+	if (cut === 0 || /^[a-z]:$/i.test(trimmed.slice(0, cut))) return trimmed.slice(0, cut + 1);
+	const parent = trimmed.slice(0, cut);
+	return parent === trimmed ? null : parent;
+}
+/**
+* The directories the tree must have expanded for `dir` to be on screen under
+* `root`: `root` itself, then every directory from just below it down to and
+* including `dir`, outermost first. `[]` when `dir` is not under `root`.
+*
+* Built by cutting `dir` down rather than by joining segments back up, so each
+* entry is byte-identical to the `path` the backend prints on the matching tree
+* node — `FolderTab.expanded` is keyed by that string, and a re-joined path
+* would miss on a Windows separator or a case difference.
+*/
+function revealChain(root, dir) {
+	if (!underRoot(dir, root)) return [];
+	const rootKey = normPath(root).replace(/\/+$/, "");
+	const chain = [];
+	let cur = dir;
+	while (cur !== null && normPath(cur).replace(/\/+$/, "") !== rootKey) {
+		chain.push(cur);
+		cur = parentDir(cur);
+	}
+	chain.push(root);
+	return chain.reverse();
+}
 // src/utils.ts
 var extOf = (p) => {
 	const slash = Math.max(p.lastIndexOf("/"), p.lastIndexOf("\\"));
@@ -538,7 +621,22 @@ var extOf = (p) => {
 	return base.slice(i).toLowerCase();
 };
 var basename = (p) => pathBasename(stripTrailingSeparators(p));
+/** A UNC share root (`\\host\share`), the top of its own tree. */
+var UNC_SHARE_ROOT_RE = /^\\\\[^\\/]+[\\/][^\\/]+[\\/]*$/;
+/** The folder that contains `p`, used to re-root a folder tab.
+*
+*  A Windows gateway prints paths with backslashes (`str(Path)` in
+*  `backend/server.py`), so a Windows-shaped path (drive-rooted or backslash
+*  UNC, the `backslashIsSeparator` test) takes `parentDir`'s separator-aware
+*  cut. At a drive root (`C:\`) or a UNC share root (`\\host\share`) there is
+*  no parent, so the path itself comes back and re-rooting to it is a no-op.
+*  Every other path keeps the POSIX rule: only `/` separates, because on POSIX
+*  a backslash is a legal file-name character (`/tmp/we\ird` is one name). */
 var dirname = (p) => {
+	if (backslashIsSeparator(p)) {
+		if (UNC_SHARE_ROOT_RE.test(p)) return p;
+		return parentDir(p) ?? p;
+	}
 	const s = p.replace(/\/+$/, "");
 	const i = s.lastIndexOf("/");
 	if (i <= 0) return "/";
@@ -621,71 +719,6 @@ var saveState = (state) => {
 		safeSetItem(STORAGE_KEY, JSON.stringify(state));
 	} catch {}
 };
-// src/deepLink.ts
-/**
-* The Files page's deep link: `<page route>?path=<absolute path>`.
-*
-* Another dashboard surface (the chat side panel's file viewer) hands a file to
-* this page through that URL. `FileExplorerPage` reads the param once, resolves
-* it through the app's own backend, and opens it in the tab whose root already
-* contains it, or in a new tab rooted at its folder. The page never trusts the
-* raw value: the backend's `resolve` says whether the path exists, what it is,
-* and whether this app may show it at all.
-*
-* Only the reading half lives here. The link BUILDER belongs to whoever links
-* in (Kiro Crew's own file viewer); see PORTING.md.
-*
-* Pure on purpose: the containment rule and the reveal chain are pinned by
-* `ui/tests/deepLink.test.ts` rather than by driving the page.
-*/
-/** Query param naming the path to open. */
-var FILE_EXPLORER_PATH_PARAM = "path";
-/**
-* A path in the form the page compares by. Windows drive (`C:\x`) and UNC
-* (`\\host\share`) paths compare with either separator and case-insensitively;
-* everything else compares byte for byte, since a POSIX path IS case-sensitive.
-*/
-var normPath = (x) => /^([a-z]:|[\\/]{2})/i.test(x) ? x.replace(/\\/g, "/").toLowerCase() : x;
-/** `p` is the root `r` itself or a path below it. */
-var underRoot = (p, r) => {
-	const [a, b] = [normPath(p), normPath(r).replace(/\/+$/, "")];
-	return a === b || a.startsWith(b + "/") || b === "";
-};
-/**
-* The directory containing `p`, or `null` at a filesystem root. Separator-aware
-* because the backend prints paths with the host's own separator (`str(Path)`),
-* so on a Windows gateway every one is a backslash; `utils.dirname` is POSIX-only.
-*/
-function parentDir(p) {
-	const trimmed = p.replace(/[\\/]+$/, "");
-	const cut = Math.max(trimmed.lastIndexOf("/"), trimmed.lastIndexOf("\\"));
-	if (cut < 0) return null;
-	if (cut === 0 || /^[a-z]:$/i.test(trimmed.slice(0, cut))) return trimmed.slice(0, cut + 1);
-	const parent = trimmed.slice(0, cut);
-	return parent === trimmed ? null : parent;
-}
-/**
-* The directories the tree must have expanded for `dir` to be on screen under
-* `root`: `root` itself, then every directory from just below it down to and
-* including `dir`, outermost first. `[]` when `dir` is not under `root`.
-*
-* Built by cutting `dir` down rather than by joining segments back up, so each
-* entry is byte-identical to the `path` the backend prints on the matching tree
-* node — `FolderTab.expanded` is keyed by that string, and a re-joined path
-* would miss on a Windows separator or a case difference.
-*/
-function revealChain(root, dir) {
-	if (!underRoot(dir, root)) return [];
-	const rootKey = normPath(root).replace(/\/+$/, "");
-	const chain = [];
-	let cur = dir;
-	while (cur !== null && normPath(cur).replace(/\/+$/, "") !== rootKey) {
-		chain.push(cur);
-		cur = parentDir(cur);
-	}
-	chain.push(root);
-	return chain.reverse();
-}
 // src/styles.ts
 var FE_CSS = `
 .mc-fe-root { display:flex; flex-direction:column; height:100%; min-height:0; background:var(--bg); color:var(--text); font-size:13px; font-family:var(--font-body, -apple-system, BlinkMacSystemFont, sans-serif); letter-spacing:-.02em; }
@@ -2659,10 +2692,6 @@ function FileViewer({ filePath, fileMeta, content, loading, error, onReload, onD
 	] });
 }
 // src/SearchPanel.tsx
-function shortenPath(p, root) {
-	if (root && p.startsWith(root)) return p.slice(root.length).replace(/^\//, "");
-	return p;
-}
 function SearchPanel({ rootPath, onClose, onJump }) {
 	const [q, setQ] = useState("");
 	const [include, setInclude] = useState("");
@@ -2751,7 +2780,7 @@ function SearchPanel({ rootPath, onClose, onJump }) {
 									opacity: .6
 								}
 							}),
-							shortenPath(r.file, rootPath),
+							relativeToRoot(r.file, rootPath),
 							/* @__PURE__ */ jsxs("span", {
 								style: {
 									color: "var(--muted)",
@@ -3169,7 +3198,7 @@ function FileExplorerPage() {
 			if (isShortcut(e) && e.key.toLowerCase() === "f") {
 				e.preventDefault();
 				toggleSearch();
-			} else if (isShortcut(e) && e.key.toLowerCase() === "t") {
+			} else if (isShortcut(e) && !e.shiftKey && e.key.toLowerCase() === "t") {
 				e.preventDefault();
 				newFolderTabAction();
 			} else if (isShortcut(e) && e.key.toLowerCase() === "w") {

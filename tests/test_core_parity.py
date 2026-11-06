@@ -148,6 +148,7 @@ class TestTheListenerRefusesUnsignedCallers(unittest.TestCase):
             patch.object(server, "ALLOWED_ROOTS", [self.tmp]),
             patch.object(server, "is_sensitive_path", lambda p: False),
             patch.object(server, "safe_read_file_bytes", lambda raw: Path(raw).read_bytes()),
+            patch.object(server, "safe_read_prefix", lambda raw, n: Path(raw).read_bytes()[:n]),
             patch.object(server, "verify_proxy_request", _verify_v1),
             patch.object(server, "sel", lambda: _NoAudit()),
             patch.dict(os.environ, {"KIROCREW_PROXY_SECRET": "s3cr3t-for-tests"}),

@@ -61,17 +61,20 @@ from pathlib import Path
 # the policy every other Kiro Crew surface enforces:
 #
 # - ``verify_proxy_request``: the documented App Kit proxy HMAC check (public).
-# - ``is_sensitive_path`` and ``safe_read_file_bytes``: the host's credential
-#   fence and its link-safe read.
+# - ``is_sensitive_path``, ``safe_read_file_bytes`` and ``safe_read_prefix``:
+#   the host's credential fence and its link-safe whole-file and prefix reads.
 # - the sandbox wrapper for the ``git`` and ``rg`` children, and the platform
 #   boot it reads its floor from.
+# - ``validate_provider_executable``: the provenance check the host's own file
+#   search runs on the ``rg`` it finds on ``$PATH``.
 # - the security event log.
 #
 # Each import is feature-detected. A missing one never widens access: without
 # the proxy check every signed route answers 401, without the credential fence
-# or the safe read every path is refused, without the sandbox wrapper ``git``
-# is not run (503) and search uses the in-process engine, and without the event
-# log the audit line goes to this process's own log. ``HOST_GAPS`` names what
+# or a safe read every path is refused, without the sandbox wrapper ``git`` is
+# not run (503) and search uses the in-process engine, without the provenance
+# check no ``rg`` is run and search uses the in-process engine, and without the
+# event log the audit line goes to this process's own log. ``HOST_GAPS`` names what
 # is missing; ``/health`` reports it so the operator sees why.
 
 HOST_GAPS: list[str] = []
@@ -125,6 +128,18 @@ except Exception:  # noqa: BLE001
 
 
 try:
+    from kiro_crew.hooks import FileTooLargeError, safe_read_prefix
+except Exception:  # noqa: BLE001
+    HOST_GAPS.append("safe_read_prefix")
+
+    class FileTooLargeError(Exception):  # type: ignore[no-redef]
+        """Stands in for the host's whole-file read cap error when it is absent."""
+
+    def safe_read_prefix(raw: str, n: int) -> bytes | None:  # type: ignore[misc]
+        return None
+
+
+try:
     from kiro_crew.sandbox import (
         SandboxUnavailableError,
         cgroup_scope_argv,
@@ -143,6 +158,17 @@ except Exception:  # noqa: BLE001
 
     def run_limited(argv, **_kwargs):  # type: ignore[misc]
         raise _LocalSandboxUnavailable()
+
+
+try:
+    from kiro_crew.github_runner import validate_provider_executable
+except Exception:  # noqa: BLE001
+    HOST_GAPS.append("executable_provenance")
+
+    def validate_provider_executable(  # type: ignore[misc]
+        candidate: str, **_kwargs: object
+    ) -> str:
+        raise ValueError("the host's executable provenance check is not available to this app")
 
 
 try:
@@ -316,6 +342,24 @@ SENSITIVE_DIRS = {
 # KiroCrew data-home subdirectories that are safe for the file explorer to
 # access. Everything else under the data home is blocked (keys, tokens, DB,
 # sessions).
+#
+# ``members`` holds one directory per crewmate, each carrying only that
+# crewmate's non-secret working files: its activity log, first-welcome marker,
+# the self-briefing it keeps for its future self, its Dynamic Dashboard page
+# state, and the notes and drafts it writes for the user. The chat file preview
+# already opens these (its read gate
+# is the sensitive-path list, which does not name anything under ``members/``),
+# so the file explorer refusing the same files was a gap: this set predates
+# member spaces and was never updated when they arrived. Listing ``members``
+# here lets the explorer read exactly what the preview already reads -- no
+# write-access change.
+#
+# The secret-holding member data is NOT under ``members/`` and stays refused on
+# both read paths by name: per-crewmate rules, goals and DM bindings live in the
+# sibling ``member-records/`` leaf, memory in ``memory_stores/``, and retained V1
+# bindings in ``member-memory-bindings/`` -- each denied by the shared
+# sensitive-path list and masked by the OS sandbox. Those are siblings of
+# ``members/``, not children of it, so admitting ``members`` does not reach them.
 _KIROCREW_SAFE_SUBDIRS = {
     "workspace",
     "uploads",
@@ -327,6 +371,7 @@ _KIROCREW_SAFE_SUBDIRS = {
     "pods",
     "logs",
     "crons",
+    "members",
 }
 
 _SENSITIVE_DIRS_CF = frozenset(d.casefold() for d in SENSITIVE_DIRS)
@@ -784,10 +829,10 @@ def _is_binary_file(p: Path) -> bool:
     p = _contain_in_allowed_roots(p, operation="file_read")
     # Sniff first 8KB for NUL bytes
     try:
-        chunk = safe_read_file_bytes(str(p))
+        chunk = safe_read_prefix(str(p), 8192)
         if chunk is None:
             return False
-        if b"\x00" in chunk[:8192]:
+        if b"\x00" in chunk:
             return True
     except OSError:
         return False
@@ -904,8 +949,21 @@ def _git_status(repo_root: Path) -> dict:
     return out
 
 
-def _has_rg() -> bool:
-    return shutil.which("rg") is not None
+def _rg_executable() -> str | None:
+    """The ``rg`` search may run, as a vetted absolute path, or None.
+
+    ``$PATH`` can reach a tree the agent writes, so the first ``rg`` on it goes
+    through the same provenance check the dashboard's file search uses. A
+    refusal is not an error: the python engine answers instead.
+    """
+    found = shutil.which("rg")
+    if not found:
+        return None
+    try:
+        return validate_provider_executable(found)
+    except ValueError as exc:
+        logger.warning("refusing rg at %s: %s", found, exc)
+        return None
 
 
 # ---------------------------------------------------------------------------
@@ -918,20 +976,30 @@ def _search(root: Path, query: str, include: str = "", exclude: str = "") -> lis
     a Python implementation for portability.  Returns results in ripgrep order
     (per-file).
     """
-    if not query:
+    return _search_using(_rg_executable(), root, query, include, exclude)
+
+
+def _search_using(
+    executable: str | None, root: Path, query: str, include: str, exclude: str
+) -> list[dict]:
+    """:func:`_search` with the ``rg`` lookup already done (None: python engine),
+    so a caller that also reports the engine asks :func:`_rg_executable` once."""
+    # ripgrep reads the pattern line by line (`--file -`), so a line break would
+    # turn one query into two; both engines match single lines, so answer empty.
+    if not query or "\n" in query or "\r" in query:
         return []
-    if _has_rg():
-        return _search_rg(root, query, include, exclude)
+    if executable is not None:
+        return _search_rg(root, query, include, exclude, executable)
     return _search_python(root, query, include, exclude)
 
 
-def _search_rg(root: Path, query: str, include: str, exclude: str) -> list[dict]:
+def _search_rg(root: Path, query: str, include: str, exclude: str, executable: str) -> list[dict]:
     # Re-contain so the search root passed to the rg argv is the RETURN of a
     # raising ALLOWED_ROOTS barrier (idempotent for the _safe_path'd caller
     # value; makes the containment legible to CodeQL py/path-injection).
     root = _contain_in_allowed_roots(root, operation="file_search")
     cmd = [
-        "rg",
+        executable,
         "--json",
         "--max-count",
         "20",
@@ -991,12 +1059,15 @@ def _search_rg(root: Path, query: str, include: str, exclude: str) -> list[dict]
     # of an excluded dir without flipping its whole glob set into allowlist mode.)
     for name in platform_compat.tcc_protected_dirs_for_walk(root):
         cmd += ["--glob", f"!/{name}"]
-    cmd += ["--", query, str(root)]
+    # The query goes on stdin, not argv: other accounts on the host can read a
+    # child's arguments through `/proc/<pid>/cmdline` and `ps`.
+    cmd += ["--file", "-", "--", str(root)]
     try:
         wrapped_cmd, _ = wrap_argv(cmd)
         wrapped_cmd = cgroup_scope_argv(wrapped_cmd)  # cgroup DoS ceiling
         proc = run_limited(
             wrapped_cmd,
+            input=query + "\n",
             capture_output=True,
             text=True,
             # ``rg --json`` is UTF-8 by definition. Decoding it with the host
@@ -1020,7 +1091,9 @@ def _search_rg(root: Path, query: str, include: str, exclude: str) -> list[dict]
         return _search_python(root, query, include, exclude)
     out: list[dict] = []
     for line in proc.stdout.splitlines():
-        if len(out) >= MAX_SEARCH_RESULTS:
+        # Keep one result past the cap so the caller can tell "exactly full"
+        # from "more were cut off".
+        if len(out) > MAX_SEARCH_RESULTS:
             break
         try:
             obj = json.loads(line)
@@ -1096,7 +1169,8 @@ def _search_python(root: Path, query: str, include: str, exclude: str) -> list[d
                 dirnames[:] = [d for d in dirnames if _is_safe_crew_subdir(d)]
             filenames[:] = []  # never surface crew-home root files
         for fn in filenames:
-            if len(out) >= MAX_SEARCH_RESULTS:
+            # One result past the cap, as in ``_search_rg``.
+            if len(out) > MAX_SEARCH_RESULTS:
                 return out
             fp = Path(dirpath) / fn
             if inc_pats and not _matches_globs(fp, inc_pats):
@@ -1122,10 +1196,10 @@ def _search_python(root: Path, query: str, include: str, exclude: str) -> list[d
                                 "preview": line.rstrip("\n")[:400],
                             }
                         )
-                        if len(out) >= MAX_SEARCH_RESULTS:
+                        if len(out) > MAX_SEARCH_RESULTS:
                             return out
                         break  # one match per file is enough for v1 list
-            except OSError:
+            except (OSError, FileTooLargeError):
                 continue
     return out
 
@@ -1198,7 +1272,7 @@ class FileExplorerHandler(BaseHTTPRequestHandler):
                     "status": "ok",
                     "app": APP_NAME,
                     "version": "0.2.1",
-                    "rg": _has_rg(),
+                    "rg": _rg_executable() is not None,
                     "allowedRoots": [str(p) for p in ALLOWED_ROOTS],
                     # The user's home dir (resolved) — the frontend opens here
                     # by default instead of guessing from allowedRoots, which
@@ -1323,7 +1397,9 @@ class FileExplorerHandler(BaseHTTPRequestHandler):
             return self._json(200, body)
         # Text: utf-8 with replacement, optional truncation
         try:
-            raw_bytes = safe_read_file_bytes(str(p))
+            # Read one byte past the cap: enough to know whether to truncate,
+            # and never the whole file (which the 50 MB read cap refuses).
+            raw_bytes = safe_read_prefix(str(p), max_bytes + 1)
             if raw_bytes is None:
                 raise PathError("access denied", 403)
             truncated = len(raw_bytes) > max_bytes
@@ -1343,16 +1419,21 @@ class FileExplorerHandler(BaseHTTPRequestHandler):
         p = _safe_path(raw, must_exist=True)
         if not p.is_dir():
             raise PathError(f"not a directory: {p}", 400)
+        executable = _rg_executable()
+        engine = "rg" if executable is not None else "python"
         if not q.strip():
-            return self._json(200, {"results": [], "engine": "rg" if _has_rg() else "python"})
+            return self._json(200, {"results": [], "engine": engine})
         _sel_audit("file_search", f"{p} q={q}")
-        results = _search(p, q, include=include, exclude=exclude)
+        results = _search_using(executable, p, q, include, exclude)
+        # The collectors return at most one result past the cap; only that
+        # extra result proves matches were cut off.
+        truncated = len(results) > MAX_SEARCH_RESULTS
         return self._json(
             200,
             {
-                "results": results,
-                "engine": "rg" if _has_rg() else "python",
-                "truncated": len(results) >= MAX_SEARCH_RESULTS,
+                "results": results[:MAX_SEARCH_RESULTS],
+                "engine": engine,
+                "truncated": truncated,
             },
         )
 
@@ -1553,7 +1634,7 @@ def main() -> int:
     logger.info(
         "listening on http://127.0.0.1:%d  rg=%s  allowed=%s",
         PORT,
-        _has_rg(),
+        _rg_executable() is not None,
         [str(p) for p in ALLOWED_ROOTS],
     )
     try:

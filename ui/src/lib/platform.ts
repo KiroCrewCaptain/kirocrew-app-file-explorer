@@ -7,7 +7,7 @@
 /** A path whose backslashes are separators: a drive path (`C:\x`) or a UNC share. */
 const WINDOWS_SHAPED_PATH_RE = /^(?:[A-Za-z]:|\\\\[^\\/]+)[\\/]/
 
-function backslashIsSeparator(p: string): boolean {
+export function backslashIsSeparator(p: string): boolean {
   return WINDOWS_SHAPED_PATH_RE.test(p)
 }
 
@@ -22,6 +22,25 @@ export function pathBasename(p: string): string {
 /** `p` without trailing separators (backslashes only on a Windows-shaped path). */
 export function stripTrailingSeparators(p: string): string {
   return p.replace(backslashIsSeparator(p) ? /[\\/]+$/ : /\/+$/, '')
+}
+
+/** `p` as a label relative to `root`, for DISPLAY only: `C:\proj\src\a.py`
+ *  under `C:\proj` → `src\a.py`. A Windows-shaped `p` matches `root` with
+ *  either separator and without case, since the backend prints native paths
+ *  while a root may carry another spelling; a POSIX path matches byte for
+ *  byte. `p` comes back whole when it is not under `root`, and `''` when it
+ *  IS `root`. */
+export function relativeToRoot(p: string, root: string): string {
+  if (!root) return p
+  const r = stripTrailingSeparators(root)
+  const win = backslashIsSeparator(p)
+  const fold = (x: string) => (win ? x.replace(/\\/g, '/').toLowerCase() : x)
+  // Folding equal-length slices keeps the cut at `r.length` in `p`'s own text.
+  if (p.length < r.length || fold(p.slice(0, r.length)) !== fold(r)) return p
+  const rest = p.slice(r.length)
+  const sep = win ? /^[\\/]+/ : /^\/+/
+  if (rest !== '' && r !== '' && !sep.test(rest)) return p
+  return rest.replace(sep, '')
 }
 
 /**

@@ -135,7 +135,8 @@ Linux and macOS, `/home`, `/opt` and `/workplace` where they exist. A link that
 points outside those places is refused. Sign-in folders such as `.ssh`, `.aws`,
 `.gnupg`, `.docker` and `.kube` are hidden and cannot be opened, and inside Kiro
 Crew's own data folder only the workspace, uploads, skills, artifacts, apps,
-app-sources, workflows, pods, logs and crons folders are shown.
+app-sources, workflows, pods, logs and crons folders are shown, plus each
+crewmate's own working files under members (its notes, drafts and briefing).
 
 ## Settings & data
 

@@ -4,10 +4,12 @@ Kiro Crew adopts a user's built-in record onto this repository in place, at a
 pinned commit, with no consent dialog, so the tree must be something it can take
 over unchanged:
 
-- the same name, version, permissions, platform and ``defaultEnabled`` as the
-  built-in (``tests/fixtures/builtin-app.json`` is its manifest at the commit
-  this was ported from). A widened grant would be held back or force the app
-  off, and adoption refuses that;
+- the same name, permissions, platform and ``defaultEnabled`` as the built-in
+  (``tests/fixtures/builtin-app.json`` is its manifest at the commit this was
+  ported from), and a version never below its. A widened grant would be held
+  back or force the app off, and adoption refuses that. Adoption matches the
+  version against Kiro Crew's pin of one commit here, so a later commit carries
+  a later patch version, which is what shows an adopted user the update;
 - a FILE-style ``backend.entryPoint`` inside the tree: the built-in's
   module-style entry (``kiro_crew.apps.builtins.file_explorer.server``) only
   resolves inside the Kiro Crew package;
@@ -191,10 +193,16 @@ class TestTheManifest(unittest.TestCase):
 
     def test_what_adoption_compares_is_the_builtins(self) -> None:
         manifest, builtin = _manifest(), _builtin()
-        for key in ("name", "version", "permissions", "defaultEnabled"):
+        for key in ("name", "permissions", "defaultEnabled"):
             with self.subTest(field=key):
                 self.assertEqual(manifest[key], builtin[key])
         self.assertEqual(manifest["platform"], builtin["platform"])
+
+        def parsed(version: str) -> tuple[int, ...]:
+            self.assertRegex(version, r"^\d+\.\d+\.\d+$")
+            return tuple(int(part) for part in version.split("."))
+
+        self.assertGreaterEqual(parsed(manifest["version"]), parsed(builtin["version"]))
 
     def test_declares_nothing_adoption_cannot_carry(self) -> None:
         manifest = _manifest()

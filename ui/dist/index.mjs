@@ -789,7 +789,11 @@ var FE_CSS = `
 .mc-fe-iconbtn:hover:not(:disabled) { color:var(--text); border-color:var(--border); background:var(--card); }
 .mc-fe-iconbtn:disabled { opacity:.4; cursor:not-allowed; }
 .mc-fe-viewer-body { flex:1; overflow:auto; min-height:0; padding:14px 18px; }
-.mc-fe-viewer-body > * { font-size:unset; line-height:unset; }
+.mc-fe-viewer-body > *, .mc-fe-code-file > * { font-size:unset; line-height:unset; }
+/* The host's code editor carries a 480px cap as the utility class below. In a
+   file view the panel scrolls instead. Should the host rename the class, the
+   cap simply comes back. */
+.mc-fe-code-file .max-h-\\[480px\\] { max-height:none; }
 .mc-fe-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:var(--muted); font-size:13px; }
 .mc-fe-img-wrap { display:flex; align-items:center; justify-content:center; height:100%; padding:20px; }
 .mc-fe-search { display:flex; flex-direction:column; height:100%; min-height:0; }
@@ -2661,7 +2665,10 @@ function renderViewerBody({ ext, fileMeta, content, openFile }) {
 	const maxRun = (content || "").match(/`{3,}/g)?.reduce((max, s) => Math.max(max, s.length), 0) ?? 0;
 	const fence = "`".repeat(Math.max(3, maxRun + 1));
 	const wrapped = fence + lang + "\n" + (content || "") + "\n" + fence;
-	return /* @__PURE__ */ jsx(MarkdownRenderer, { content: wrapped });
+	return /* @__PURE__ */ jsx("div", {
+		className: "mc-fe-code-file",
+		children: /* @__PURE__ */ jsx(MarkdownRenderer, { content: wrapped })
+	});
 }
 function FileViewer({ filePath, fileMeta, content, loading, error, onReload, onDownload }) {
 	const isMobile = useIsMobile();

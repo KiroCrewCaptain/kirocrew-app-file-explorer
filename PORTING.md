@@ -213,6 +213,7 @@ this copy has it too. Kiro Crew `main` commits; the issue in brackets.
 | `3adab5e0c4` (#30503) | A folder with exactly 500 matches no longer says **(capped)** | `/search` keeps one result past the cap |
 | `600ae6b0cf` (#10852) | Search never runs an `rg` that fails the host's provenance check, the query goes to `rg` on stdin instead of its command line, and a query with a line break returns nothing | `validate_provider_executable` in the bridge |
 | `93a9c7faf9` (#32895) | A screen reader names a tree row with git changes by its status word ("app.py modified", or "git status UU" for a conflict) instead of the badge letter, in every shipped language | `gitBadge` in `ui/src/TreeNode.tsx` and the six `treeNode.git_*` keys in every `ui/i18n/` catalog (this repository's pull request #1) |
+| none yet (#30739) | **Edit** on a long code file keeps the read view's height and scrolls with the panel, instead of stopping at about 25 lines (480px) with an empty panel below; a code block in chat keeps its cap | a `.mc-fe-code-file` container around a code file in `ui/src/FileViewer.tsx`, whose rule in `ui/src/styles.ts` lifts the host editor's `max-h-[480px]` utility class. It targets a host class name: should the host rename it, the cap comes back and nothing else changes |
 
 The tests each fix added are under `tests/` and `ui/tests/`.
 

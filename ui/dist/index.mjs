@@ -1021,7 +1021,15 @@ var CATALOGS = {
 			"new_workspace_tab_ctrl_cmd_t": "নতুন ওয়ার্কস্পেস ট্যাব (Ctrl/Cmd+T)",
 			"rename_workspace_tab": "ওয়ার্কস্পেস ট্যাবের নাম বদলান"
 		},
-		treeNode: { "loading": "লোড হচ্ছে..." },
+		treeNode: {
+			"loading": "লোড হচ্ছে...",
+			"git_added": "যোগ করা হয়েছে",
+			"git_deleted": "মুছে ফেলা হয়েছে",
+			"git_modified": "পরিবর্তিত",
+			"git_status_code": "git অবস্থা {{code}}",
+			"git_renamed": "নাম বদলানো হয়েছে",
+			"git_untracked": "ট্র্যাক করা হয়নি"
+		},
 		common: {
 			"app_disabled_title": "এই অ্যাপটি বন্ধ করা আছে",
 			"app_disabled_hint": "এটি ব্যবহার করতে অ্যাপস থেকে এই অ্যাপটি চালু করুন।",
@@ -1099,7 +1107,15 @@ var CATALOGS = {
 			"new_workspace_tab_ctrl_cmd_t": "Neuer Workspace-Tab (Strg/Cmd+T)",
 			"rename_workspace_tab": "Workspace-Tab umbenennen"
 		},
-		treeNode: { "loading": "wird geladen…" },
+		treeNode: {
+			"loading": "wird geladen…",
+			"git_added": "hinzugefügt",
+			"git_deleted": "gelöscht",
+			"git_modified": "geändert",
+			"git_status_code": "Git-Status {{code}}",
+			"git_renamed": "umbenannt",
+			"git_untracked": "nicht verfolgt"
+		},
 		common: {
 			"app_disabled_title": "Diese App ist deaktiviert",
 			"app_disabled_hint": "Aktivieren Sie diese App unter „Apps“, um sie zu verwenden.",
@@ -1177,7 +1193,15 @@ var CATALOGS = {
 			"new_workspace_tab_ctrl_cmd_t": "New workspace tab (Ctrl/Cmd+T)",
 			"rename_workspace_tab": "Rename workspace tab"
 		},
-		treeNode: { "loading": "loading..." },
+		treeNode: {
+			"loading": "loading...",
+			"git_added": "added",
+			"git_deleted": "deleted",
+			"git_modified": "modified",
+			"git_status_code": "git status {{code}}",
+			"git_renamed": "renamed",
+			"git_untracked": "untracked"
+		},
 		common: {
 			"app_disabled_title": "This app is disabled",
 			"app_disabled_hint": "Enable this app from Apps to use it.",
@@ -1255,7 +1279,15 @@ var CATALOGS = {
 			"new_workspace_tab_ctrl_cmd_t": "Nueva pestaña de espacio de trabajo (Ctrl/Cmd+T)",
 			"rename_workspace_tab": "Renombrar la pestaña del espacio de trabajo"
 		},
-		treeNode: { "loading": "cargando..." },
+		treeNode: {
+			"loading": "cargando...",
+			"git_added": "añadido",
+			"git_deleted": "eliminado",
+			"git_modified": "modificado",
+			"git_status_code": "estado de git {{code}}",
+			"git_renamed": "renombrado",
+			"git_untracked": "sin seguimiento"
+		},
 		common: {
 			"app_disabled_title": "Esta app está desactivada",
 			"app_disabled_hint": "Activa esta app desde Apps para usarla.",
@@ -1334,7 +1366,15 @@ var CATALOGS = {
 			"new_workspace_tab_ctrl_cmd_t": "Nouvel onglet d'espace de travail (Ctrl/Cmd+T)",
 			"rename_workspace_tab": "Renommer l'onglet d'espace de travail"
 		},
-		treeNode: { "loading": "chargement..." },
+		treeNode: {
+			"loading": "chargement...",
+			"git_added": "ajouté",
+			"git_deleted": "supprimé",
+			"git_modified": "modifié",
+			"git_status_code": "état git {{code}}",
+			"git_renamed": "renommé",
+			"git_untracked": "non suivi"
+		},
 		common: {
 			"app_disabled_title": "Cette application est désactivée",
 			"app_disabled_hint": "Activez cette application depuis Applications pour l’utiliser.",
@@ -1413,7 +1453,15 @@ var CATALOGS = {
 			"new_workspace_tab_ctrl_cmd_t": "नया वर्कस्पेस टैब (Ctrl/Cmd+T)",
 			"rename_workspace_tab": "वर्कस्पेस टैब का नाम बदलें"
 		},
-		treeNode: { "loading": "लोड हो रहा है..." },
+		treeNode: {
+			"loading": "लोड हो रहा है...",
+			"git_added": "जोड़ा गया",
+			"git_deleted": "हटाया गया",
+			"git_modified": "बदला गया",
+			"git_status_code": "git स्थिति {{code}}",
+			"git_renamed": "नाम बदला गया",
+			"git_untracked": "ट्रैक नहीं किया गया"
+		},
 		common: {
 			"app_disabled_title": "यह ऐप अक्षम है",
 			"app_disabled_hint": "इसका उपयोग करने के लिए इस ऐप को ऐप्स से सक्षम करें।",
@@ -1491,7 +1539,15 @@ var CATALOGS = {
 			"new_workspace_tab_ctrl_cmd_t": "Nuova scheda del workspace (Ctrl/Cmd+T)",
 			"rename_workspace_tab": "Rinomina la scheda del workspace"
 		},
-		treeNode: { "loading": "caricamento..." },
+		treeNode: {
+			"loading": "caricamento...",
+			"git_added": "aggiunto",
+			"git_deleted": "eliminato",
+			"git_modified": "modificato",
+			"git_status_code": "stato git {{code}}",
+			"git_renamed": "rinominato",
+			"git_untracked": "non tracciato"
+		},
 		common: {
 			"app_disabled_title": "Questa app è disattivata",
 			"app_disabled_hint": "Attiva questa app da App per poterla usare.",
@@ -1570,7 +1626,15 @@ var CATALOGS = {
 			"new_workspace_tab_ctrl_cmd_t": "新しいワークスペースタブ (Ctrl/Cmd+T)",
 			"rename_workspace_tab": "ワークスペースタブの名前を変更"
 		},
-		treeNode: { "loading": "読み込み中…" },
+		treeNode: {
+			"loading": "読み込み中…",
+			"git_added": "追加",
+			"git_deleted": "削除",
+			"git_modified": "変更あり",
+			"git_status_code": "git の状態 {{code}}",
+			"git_renamed": "名前変更",
+			"git_untracked": "未追跡"
+		},
 		common: {
 			"app_disabled_title": "このアプリは無効です",
 			"app_disabled_hint": "使用するにはアプリからこのアプリを有効にしてください。",
@@ -1647,7 +1711,15 @@ var CATALOGS = {
 			"new_workspace_tab_ctrl_cmd_t": "새 워크스페이스 탭 (Ctrl/Cmd+T)",
 			"rename_workspace_tab": "워크스페이스 탭 이름 변경"
 		},
-		treeNode: { "loading": "불러오는 중…" },
+		treeNode: {
+			"loading": "불러오는 중…",
+			"git_added": "추가됨",
+			"git_deleted": "삭제됨",
+			"git_modified": "수정됨",
+			"git_status_code": "git 상태 {{code}}",
+			"git_renamed": "이름 변경됨",
+			"git_untracked": "추적 안 됨"
+		},
 		common: {
 			"app_disabled_title": "이 앱은 비활성화되어 있습니다",
 			"app_disabled_hint": "사용하려면 앱에서 이 앱을 활성화하세요.",
@@ -1724,7 +1796,15 @@ var CATALOGS = {
 			"new_workspace_tab_ctrl_cmd_t": "Nova aba de workspace (Ctrl/Cmd+T)",
 			"rename_workspace_tab": "Renomear aba do workspace"
 		},
-		treeNode: { "loading": "carregando..." },
+		treeNode: {
+			"loading": "carregando...",
+			"git_added": "adicionado",
+			"git_deleted": "excluído",
+			"git_modified": "modificado",
+			"git_status_code": "status do git {{code}}",
+			"git_renamed": "renomeado",
+			"git_untracked": "não rastreado"
+		},
 		common: {
 			"app_disabled_title": "Este app está desativado",
 			"app_disabled_hint": "Ative este app em Apps para usá-lo.",
@@ -1803,7 +1883,15 @@ var CATALOGS = {
 			"new_workspace_tab_ctrl_cmd_t": "Новая вкладка рабочей области (Ctrl/Cmd+T)",
 			"rename_workspace_tab": "Переименовать вкладку рабочей области"
 		},
-		treeNode: { "loading": "загрузка..." },
+		treeNode: {
+			"loading": "загрузка...",
+			"git_added": "добавлен",
+			"git_deleted": "удалён",
+			"git_modified": "изменён",
+			"git_status_code": "статус git {{code}}",
+			"git_renamed": "переименован",
+			"git_untracked": "не отслеживается"
+		},
 		common: {
 			"app_disabled_title": "Это приложение отключено",
 			"app_disabled_hint": "Включите это приложение в разделе «Приложения», чтобы использовать его.",
@@ -1883,7 +1971,15 @@ var CATALOGS = {
 			"new_workspace_tab_ctrl_cmd_t": "新建工作区标签页 (Ctrl/Cmd+T)",
 			"rename_workspace_tab": "重命名工作区标签页"
 		},
-		treeNode: { "loading": "加载中…" },
+		treeNode: {
+			"loading": "加载中…",
+			"git_added": "已添加",
+			"git_deleted": "已删除",
+			"git_modified": "已修改",
+			"git_status_code": "git 状态 {{code}}",
+			"git_renamed": "已重命名",
+			"git_untracked": "未跟踪"
+		},
 		common: {
 			"app_disabled_title": "此应用已停用",
 			"app_disabled_hint": "在“应用”中启用后即可使用。",
@@ -2373,23 +2469,31 @@ function gitBadge(code) {
 	const c = code.trim();
 	let color = "var(--warn)";
 	let label = c;
+	let name = "";
 	if (c === "??") {
 		label = "U";
 		color = "var(--accent)";
+		name = i18nT("treeNode.git_untracked");
 	} else if (c.startsWith("M") || c.endsWith("M")) {
 		label = "M";
 		color = "var(--warn)";
+		name = i18nT("treeNode.git_modified");
 	} else if (c.startsWith("A") || c.endsWith("A")) {
 		label = "A";
 		color = "var(--ok)";
+		name = i18nT("treeNode.git_added");
 	} else if (c.startsWith("D") || c.endsWith("D")) {
 		label = "D";
 		color = "var(--danger)";
+		name = i18nT("treeNode.git_deleted");
 	} else if (c.startsWith("R")) {
 		label = "R";
 		color = "var(--accent)";
+		name = i18nT("treeNode.git_renamed");
 	} else if (c === "!!") return null;
-	return /* @__PURE__ */ jsx("span", {
+	else name = i18nT("treeNode.git_status_code", { code: c });
+	return /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx("span", {
+		"aria-hidden": "true",
 		title: `git: ${c}`,
 		style: {
 			fontSize: 9,
@@ -2402,7 +2506,10 @@ function gitBadge(code) {
 			lineHeight: "12px"
 		},
 		children: label
-	});
+	}), /* @__PURE__ */ jsx("span", {
+		className: "sr-only",
+		children: ` ${name}`
+	})] });
 }
 function TreeNode({ node, depth, expanded, toggleExpand, selectedPath, onSelect, gitMap, onContextMenu }) {
 	const isDir = node.type === "dir" || node.type === "symlink";

@@ -67,7 +67,13 @@
     "rename_workspace_tab": "Renombrar la pestaña del espacio de trabajo"
   },
   "treeNode": {
-    "loading": "cargando..."
+    "loading": "cargando...",
+    "git_added": "añadido",
+    "git_deleted": "eliminado",
+    "git_modified": "modificado",
+    "git_status_code": "estado de git {{code}}",
+    "git_renamed": "renombrado",
+    "git_untracked": "sin seguimiento"
   },
   "common": {
     "app_disabled_title": "Esta app está desactivada",

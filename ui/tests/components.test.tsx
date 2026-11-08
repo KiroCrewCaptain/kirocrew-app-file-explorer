@@ -30,6 +30,8 @@ import TreeNode from '../src/TreeNode'
 import SearchPanel from '../src/SearchPanel'
 import TabStrip from '../src/TabStrip'
 import PathBar from '../src/PathBar'
+import FileViewer from '../src/FileViewer'
+import { FE_CSS } from '../src/styles'
 import type { TreeEntry, FolderTab, FileTab, GitInfo } from '../src/types'
 
 function renderPage() {
@@ -438,5 +440,43 @@ describe('PathBar', () => {
     )
     await userEvent.click(screen.getByTitle('Click to edit path'))
     expect(screen.getByPlaceholderText('/path/to/folder')).toBeInTheDocument()
+  })
+})
+
+describe('FileViewer: a code file\'s Edit view keeps the panel height (kirodotdev/KiroCrew#30739)', () => {
+  function renderFile(filePath: string, content: string) {
+    return render(
+      <>
+        {/* The host's utility, as its stylesheet defines it. */}
+        <style>{'.max-h-\\[480px\\] { max-height: 480px; }'}</style>
+        <style>{FE_CSS}</style>
+        <div className="mc-fe-right">
+          <FileViewer filePath={filePath} fileMeta={{ size: content.length, mime: 'text/plain' }} content={content} loading={false} error={null} onReload={vi.fn()} onDownload={vi.fn()} />
+        </div>
+      </>,
+    )
+  }
+
+  it('renders a code file inside the uncapped container', () => {
+    renderFile('/home/user/app.py', 'print(1)\n')
+    expect(screen.getByTestId('md-renderer').closest('.mc-fe-code-file')).not.toBeNull()
+  })
+
+  it('leaves a markdown file outside it, so its own code blocks keep the cap', () => {
+    renderFile('/home/user/README.md', '# Title\n')
+    expect(screen.getByTestId('md-renderer').closest('.mc-fe-code-file')).toBeNull()
+  })
+
+  it('lifts the host editor\'s 480px cap inside a code file and nowhere else', () => {
+    const { container } = renderFile('/home/user/app.py', 'print(1)\n')
+    // The host's editor scroller, as its utility class names it.
+    const inFile = document.createElement('div')
+    inFile.className = 'max-h-[480px]'
+    container.querySelector('.mc-fe-code-file')!.appendChild(inFile)
+    const elsewhere = document.createElement('div')
+    elsewhere.className = 'max-h-[480px]'
+    container.appendChild(elsewhere)
+    expect(getComputedStyle(inFile).maxHeight).toBe('none')
+    expect(getComputedStyle(elsewhere).maxHeight).toBe('480px')
   })
 })

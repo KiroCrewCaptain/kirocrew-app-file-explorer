@@ -39,7 +39,10 @@ function renderViewerBody({ ext, fileMeta, content, openFile }: { ext: string; f
   const maxRun = (content || '').match(/`{3,}/g)?.reduce((max, s) => Math.max(max, s.length), 0) ?? 0
   const fence = '`'.repeat(Math.max(3, maxRun + 1))
   const wrapped = fence + lang + '\n' + (content || '') + '\n' + fence
-  return <MarkdownRenderer content={wrapped} />
+  // A code file is one fence, so its Edit view is the host's chat code editor,
+  // which caps itself at 480px. `.mc-fe-code-file` (FE_CSS) lifts that cap here
+  // so the editor keeps the read view's height and the panel scrolls it.
+  return <div className="mc-fe-code-file"><MarkdownRenderer content={wrapped} /></div>
 }
 
 export default function FileViewer({ filePath, fileMeta, content, loading, error, onReload, onDownload }: FileViewerProps) {

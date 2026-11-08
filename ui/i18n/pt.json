@@ -67,7 +67,13 @@
     "rename_workspace_tab": "Renomear aba do workspace"
   },
   "treeNode": {
-    "loading": "carregando..."
+    "loading": "carregando...",
+    "git_added": "adicionado",
+    "git_deleted": "excluído",
+    "git_modified": "modificado",
+    "git_status_code": "status do git {{code}}",
+    "git_renamed": "renomeado",
+    "git_untracked": "não rastreado"
   },
   "common": {
     "app_disabled_title": "Este app está desativado",

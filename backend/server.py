@@ -249,6 +249,24 @@ platform_compat = _Platform
 PORT = int(os.environ.get("PORT", 9100))
 APP_NAME = os.environ.get("KIROCREW_APP_NAME", "file-explorer")
 
+
+def _manifest_version() -> str | None:
+    """The ``version`` in this app's ``app.json``, or None when it cannot be read.
+
+    ``/health`` reports it, so the probe names the release that is actually
+    installed. None keeps the probe answering if the manifest is unreadable.
+    """
+    manifest_path = Path(__file__).resolve().parent.parent / "app.json"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    version = manifest.get("version") if isinstance(manifest, dict) else None
+    return version if isinstance(version, str) else None
+
+
+APP_VERSION = _manifest_version()
+
 # Read size cap (bytes)
 MAX_READ_BYTES = int(os.environ.get("FE_MAX_READ_BYTES", 4 * 1024 * 1024))  # 4 MB
 MAX_TREE_ENTRIES = int(os.environ.get("FE_MAX_TREE_ENTRIES", 5000))
@@ -1271,7 +1289,7 @@ class FileExplorerHandler(BaseHTTPRequestHandler):
                 {
                     "status": "ok",
                     "app": APP_NAME,
-                    "version": "0.2.1",
+                    "version": APP_VERSION,
                     "rg": _rg_executable() is not None,
                     "allowedRoots": [str(p) for p in ALLOWED_ROOTS],
                     # The user's home dir (resolved) — the frontend opens here

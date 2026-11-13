@@ -32,7 +32,7 @@ a change here.
   response shape, the allow-list of roots, the credential and crew-home fences,
   the ignore lists, both search engines and the git-status parser are the
   built-in's `server.py` line for line: `diff` against it shows only the host
-  bridge, one added `/health` field and the two changes in the table below.
+  bridge, the `/health` changes and the two changes in the table below.
 - The page's markup, class strings, CSS (`ui/src/styles.ts`), keyboard shortcuts
   and behaviour, including the saved-state key `kc:file-explorer:state:v2`, so an
   existing user's open folders and tabs come back.
@@ -48,6 +48,7 @@ a change here.
 | `boot_platform(KiroCrewConfig.load())` in `main()` (`server.py:1387-1393`) | `_boot_host_platform()` | Same call when the host has it; skipped (and reported) when it does not, which can only happen on a host that has no sandbox wrapper this backend could use either. |
 | `sel().log_api_access(..., source="builtin-app")` (`server.py:485-491`) | `source="app"` | This copy is an installed app; it says so, using the source the host's own app audit SDK writes (`apps/audit_sdk.py:99`). |
 | `/health` | Adds `hostGaps: []` | Names any host capability this process could not import, so an operator can see why something is refused. |
+| `/health` `version` hard-coded as `"0.2.1"` (`server.py:1042`) | Read once from this repository's `app.json` (`null` if it cannot be read) | The probe names the release that is installed. The built-in's literal never moved with its manifest, so here it read `0.2.1` on a `1.0.2` install. Nothing in Kiro Crew reads the field. |
 | `iconUrl` / `heroImage*` as absolute `/app-assets/...` SVGs (`app.json:49-53`) | `iconPath` / `heroImage*` / `screenshots` as repo-relative PNGs under `assets/` | A registry app's art is repo-relative, and the catalog's publish step refuses SVG for a non-builtin source. The PNGs were rendered from the built-in SVGs (the icon at 512×512 on an opaque tile with its `--ico-a` / `--ico-b` tokens resolved to fixed amber tones; heroes at 1200×675; detail banners at 1200×288). The original SVGs are kept beside them. The store screenshot is the README's light hero. |
 | `ui.pages` `[{"route": "/file-explorer", "icon": "FolderTree"}]`, page compiled into the dashboard (`app.json:35-42`, `website/src/apps/builtinRegistry.ts:55`) | `ui.entry: "dist/index.mjs"` (a committed ESM bundle built from `ui/src/`), `ui.pages` `[{"route": "/apps/file-explorer", "label": "Files"}]`, no `icon` | An installed app ships its page as a bundle AppHost loads. The legacy `/file-explorer` route, nav id and `FolderTree` glyph of an ADOPTED record come from Kiro Crew's adoption pin (`legacyNav`), never from this manifest, so a fresh install cannot claim them. |
 | App Store copy keys in the dashboard catalogs (`apps.fileExplorer.manifest.*`) | `l10n` block in `app.json`, one entry per shipped non-English locale | The listing copy travels with the app. It is the `manifest` subtree of `ui/i18n/<locale>.json`, kept equal by a test. |

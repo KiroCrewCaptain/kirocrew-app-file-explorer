@@ -7,6 +7,7 @@ replaced by the stand-ins in ``conftest.py`` so this runs with no Kiro Crew
 installed.
 """
 
+import json
 import os
 import tempfile
 from pathlib import Path
@@ -803,6 +804,22 @@ class TestHTTPHandler:
         code, body = responses[0]
         assert code == 200
         assert body["status"] == "ok"
+
+    def test_health_reports_the_manifest_version(self, tmp_tree):
+        """The probe names the installed release, the one ``app.json`` declares."""
+        app_json = Path(server.__file__).resolve().parent.parent / "app.json"
+        declared = json.loads(app_json.read_text(encoding="utf-8"))["version"]
+        code, body = self._make_request("/health")[0]
+        assert code == 200
+        assert body["version"] == declared
+
+    @pytest.mark.parametrize("manifest", [None, "{not json", '["1.0.0"]', '{"version": 1}'])
+    def test_manifest_version_is_none_when_unreadable(self, tmp_path, monkeypatch, manifest):
+        (tmp_path / "backend").mkdir()
+        if manifest is not None:
+            (tmp_path / "app.json").write_text(manifest, encoding="utf-8")
+        monkeypatch.setattr(server, "__file__", str(tmp_path / "backend" / "server.py"))
+        assert server._manifest_version() is None
 
     def test_health_reports_home_dir(self, tmp_tree):
         """Health payload carries the resolved home dir so the frontend can
